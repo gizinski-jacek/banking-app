@@ -7,7 +7,7 @@
 	--text-color: rgb(0, 0, 0);
 	--btn-text-color: rgb(150, 0, 150);
 	--btn-bg-color: rgb(255, 215, 0);
-	--text-shadow-color: rgb(255, 225, 0);
+	--text-shadow-color: rgb(150, 0, 150);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,6 +16,7 @@
 		--text-color: rgb(255, 255, 255);
 		--btn-text-color: rgb(255, 215, 0);
 		--btn-bg-color: rgb(150, 0, 150);
+		--text-shadow-color: rgb(255, 215, 0);
 	}
 }
 
@@ -26,9 +27,13 @@ body {
 
 a {
 	color: var(--btn-text-color);
-}
+	background-color: var(--bg-color);
 
-a:hover {
-	color: var(--text-shadow-color);
-	text-shadow: 0 0 4px var(--text-shadow-color);
+	&:hover {
+		filter: brightness(110%);
+	}
+
+	&:active {
+		filter: brightness(125%);
+	}
 }
