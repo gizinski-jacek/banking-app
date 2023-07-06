@@ -19,7 +19,9 @@ export default function Header() {
 					</div>
 					<div className='relative' onClick={() => setOpenMenu(!openMenu)}>
 						<div
-							className={`${hamburgerMenu.icon} ${hamburgerMenu.nav_icon} ${
+							className={`${hamburgerMenu.icon} ${
+								hamburgerMenu.nav_icon
+							} overflow-hidden ease-in-out duration-300 ${
 								openMenu ? hamburgerMenu.open : ''
 							}`}
 						>
@@ -29,10 +31,10 @@ export default function Header() {
 						</div>
 						<nav
 							className={`${
-								openMenu ? 'initial' : 'hidden'
-							} py-2 absolute top-100 left-0`}
+								openMenu ? 'max-h-screen' : 'max-h-0'
+							} py-2 absolute top-100 left-0 overflow-hidden ease-in-out duration-300`}
 						>
-							<ul className='flex flex-col gap-5 text-xl font-semibold'>
+							<ul className='flex flex-col gap-5 text-lg font-semibold'>
 								<li>
 									<Link href='/personal-accounts'>Personal Accounts</Link>
 								</li>
@@ -80,7 +82,7 @@ export default function Header() {
 				</div>
 			</div>
 			<nav className='hidden md:block py-2 border-purple-600 border-b-2'>
-				<ul className='flex justify-between gap-10 text-2xl font-semibold'>
+				<ul className='flex justify-between gap-10 text-xl font-semibold whitespace-nowrap'>
 					<li>
 						<Link href='/personal-accounts'>Personal Accounts</Link>
 					</li>
