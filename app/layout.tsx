@@ -1,5 +1,3 @@
-import Breadcrumbs from './components/Breadcrumbs';
-import Header from './components/Header';
 import './globals.scss';
 import { Inter } from 'next/font/google';
 
@@ -19,8 +17,6 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className={inter.className}>
 				<main className='flex flex-col min-h-screen py-2 px-5 md:py-5 md:px-12 xl:py-10 xl:px-24'>
-					<Header />
-					<Breadcrumbs />
 					{children}
 				</main>
 			</body>
