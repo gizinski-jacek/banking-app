@@ -12,17 +12,17 @@ export default function Breadcrumbs() {
 			<Link href='/'>Home</Link>
 			{pathname.split('/').map((path, i, arr) => {
 				return pathname === `/${path}` ? (
-					<>
+					<div key={i}>
 						<div className='underline'>{capitalize(path)}</div>
 						{i !== arr.length - 1 && <span>{'>'}</span>}
-					</>
+					</div>
 				) : (
-					<>
+					<div key={i}>
 						<Link key={i} href={path}>
 							{capitalize(path)}
 						</Link>
 						{i !== arr.length - 1 && <span>{'>'}</span>}
-					</>
+					</div>
 				);
 			})}
 		</div>
