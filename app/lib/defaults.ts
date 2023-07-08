@@ -17,7 +17,7 @@ export const vipAccFormData: VIPAccFormData = {
 	last_name: '',
 	email: '',
 	password: '',
-	extra_funds: '10000',
+	extra_funds: 0,
 };
 
 export const businessAccFormData: BusinessAccFormData = {
