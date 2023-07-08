@@ -6,7 +6,7 @@ export interface RegularAccFormData {
 }
 
 export interface VIPAccFormData extends RegularAccFormData {
-	extra_funds: string;
+	extra_funds: number;
 }
 
 export interface BusinessAccFormData extends RegularAccFormData {
@@ -15,6 +15,6 @@ export interface BusinessAccFormData extends RegularAccFormData {
 }
 
 export interface LoginData {
-	account: string;
-	password: string;
+	account?: string;
+	password?: string;
 }
