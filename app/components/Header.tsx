@@ -2,11 +2,22 @@
 
 import Link from 'next/link';
 import Button from './Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import hamburgerMenu from '../styles/Hamburger.module.scss';
+import { useTheme } from 'next-themes';
 
 export default function Header() {
 	const [openMenu, setOpenMenu] = useState(false);
+	const [mounted, setMounted] = useState(false);
+	const { theme, setTheme } = useTheme();
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		return null;
+	}
 
 	return (
 		<div className='flex flex-col gap-5 my-5'>
@@ -58,7 +69,7 @@ export default function Header() {
 					</div>
 				</div>
 				<div className='flex flex-col gap-5 my-5'>
-					<div className='flex gap-5 justify-end text-sm'>
+					<div className='flex gap-5 items-center justify-end'>
 						<div>
 							<Link href='/help'>Help</Link>
 						</div>
@@ -68,8 +79,13 @@ export default function Header() {
 						<div>
 							<Link href='/language'>Language</Link>
 						</div>
+						<div>
+							The current theme is: {theme}
+							<Button cta={() => setTheme('light')}>Light Mode</Button>
+							<Button cta={() => setTheme('dark')}>Dark Mode</Button>
+						</div>
 					</div>
-					<div className='flex justify-between items-center text-lg'>
+					<div className='flex justify-end items-center text-lg'>
 						<div className='flex gap-5'>
 							<Button href='/open-account'>
 								<div>Open Account</div>
@@ -81,7 +97,7 @@ export default function Header() {
 					</div>
 				</div>
 			</div>
-			<nav className='hidden md:block py-2 border-purple-600 border-b-2'>
+			<nav className='hidden md:block border-purple-600 border-b-2'>
 				<ul className='flex justify-between gap-10 text-xl font-semibold whitespace-nowrap'>
 					<li>
 						<Link href='/personal-accounts'>Personal Accounts</Link>
