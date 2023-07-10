@@ -31,8 +31,12 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 				formErrors[key as keyof RegularAccFormData] = `Invalid ${key}`;
 			}
 		}
-		if (Object.keys(formErrors).length !== 0) setFormErrors(formErrors);
-		else createAccount(formData);
+		if (Object.keys(formErrors).length !== 0) {
+			setFormErrors(formErrors);
+		} else {
+			createAccount(formData);
+			setFormErrors(null);
+		}
 	}
 
 	return (
