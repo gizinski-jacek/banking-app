@@ -33,8 +33,7 @@ export default function OpenAccount() {
 				}
 			}
 			if (Object.keys(formErrors).length !== 0) throw new Error('formErrors');
-			const d = await axios.post(`/api/open-account?accType=${accType}`, data);
-			console.log(d);
+			await axios.post(`/api/open-account?accType=${accType}`, data);
 		} catch (error) {
 			console.log(error);
 		}
