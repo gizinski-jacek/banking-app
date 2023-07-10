@@ -30,8 +30,12 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 				formErrors[key as keyof VIPAccFormData] = `Invalid ${key}`;
 			}
 		}
-		if (Object.keys(formErrors).length !== 0) setFormErrors(formErrors);
-		else createAccount(formData);
+		if (Object.keys(formErrors).length !== 0) {
+			setFormErrors(formErrors);
+		} else {
+			createAccount(formData);
+			setFormErrors(null);
+		}
 	}
 
 	return (
@@ -118,8 +122,8 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						name='extra_funds'
 						min={0}
 						max={1000000}
+						step={0.01}
 						value={formData.extra_funds}
-						required
 						onChange={handleFormChange}
 					/>
 					{formErrors?.extra_funds && (
