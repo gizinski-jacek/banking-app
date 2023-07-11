@@ -1,18 +1,36 @@
 import mongoose from 'mongoose';
-import { BusinessAccModel } from '../lib/types';
+import { AccountModel } from '../lib/types';
 
 const Schema = mongoose.Schema;
 
-const Business_Account = new Schema<BusinessAccModel>(
+const AccountSchema = new Schema<AccountModel>(
 	{
-		first_name: {
+		_id: {
+			type: Schema.Types.ObjectId,
+			trim: true,
+			length: 16,
+			required: true,
+		},
+		accountID: {
+			type: String,
+			trim: true,
+			length: 16,
+			required: true,
+		},
+		accountType: {
+			type: String,
+			enum: ['regular', 'vip', 'business'],
+			trim: true,
+			required: true,
+		},
+		firstName: {
 			type: String,
 			trim: true,
 			minlength: 4,
 			maxlength: 16,
 			required: true,
 		},
-		last_name: {
+		lastName: {
 			type: String,
 			trim: true,
 			minlength: 4,
@@ -33,28 +51,32 @@ const Business_Account = new Schema<BusinessAccModel>(
 			maxlength: 128,
 			required: true,
 		},
-		company_name: {
+		companyName: {
 			type: String,
 			trim: true,
 			minlength: 8,
 			maxlength: 64,
-			required: true,
+			required: function () {
+				return this.accountType === 'business';
+			},
 		},
 		address: {
 			type: String,
 			trim: true,
 			minlength: 8,
 			maxlength: 128,
-			required: true,
+			required: function () {
+				return this.accountType === 'business';
+			},
 		},
 		balance: {
 			type: Schema.Types.Decimal128,
-			min: 0,
-			max: 1000000,
+			min: 0.0,
+			max: 1000000.0,
 			default: 100000.0,
 		},
 	},
 	{ timestamps: true }
 );
 
-module.exports = Business_Account;
+export default mongoose.model<AccountModel>('Account', AccountSchema);
