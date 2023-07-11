@@ -80,6 +80,20 @@ button {
 	}
 }
 
+input {
+	display: block;
+	padding: 2px 4px;
+	border: 2px solid var(--cstm-color);
+	color: var(--cstm-color);
+	background-color: var(--cstm-btn-color);
+	border-radius: 0.5rem;
+	margin: 0.5rem;
+
+	&:focus {
+		outline: 2px solid var(--cstm-shadow);
+	}
+}
+
 h1 {
 	font-size: 2rem;
 }
@@ -111,16 +125,4 @@ h4,
 h5,
 h6 {
 	font-weight: bold;
-}
-
-input {
-	display: block;
-	padding: 2px 4px;
-	border: 2px solid var(--cstm-btn-color);
-	color: var(--cstm-color);
-	background-color: var(--cstm-bg);
-
-	&:focus {
-		outline: 2px solid var(--cstm-btn-color);
-	}
 }
