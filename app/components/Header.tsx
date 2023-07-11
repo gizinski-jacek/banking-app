@@ -8,6 +8,7 @@ import { useTheme } from 'next-themes';
 
 export default function Header() {
 	const [openMenu, setOpenMenu] = useState(false);
+	const [openTheme, setOpenTheme] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const { theme, setTheme } = useTheme();
 
@@ -19,16 +20,24 @@ export default function Header() {
 		return null;
 	}
 
+	function selectTheme(value: string) {
+		setTheme(value);
+		setOpenTheme(false);
+	}
+
 	return (
-		<div className='flex flex-col gap-5 my-5'>
+		<div className='flex flex-col gap-8'>
 			<div className='flex flex-row justify-between justify-center'>
-				<div className='flex flex-row gap-5 my-5 items-center justify-center'>
+				<div className='flex flex-row gap-5 items-center justify-center'>
 					<div className='logo text-center'>
 						Big Bux
 						<br />
 						Banking
 					</div>
-					<div className='relative' onClick={() => setOpenMenu(!openMenu)}>
+					<div
+						className='md:hidden relative'
+						onClick={() => setOpenMenu(!openMenu)}
+					>
 						<div
 							className={`${hamburgerMenu.icon} ${
 								hamburgerMenu.nav_icon
@@ -43,33 +52,50 @@ export default function Header() {
 						<nav
 							className={`${
 								openMenu ? 'max-h-screen' : 'max-h-0'
-							} py-2 absolute top-100 left-0 overflow-hidden ease-in-out duration-300`}
+							} absolute top-100 left-0 overflow-hidden`}
 						>
-							<ul className='flex flex-col gap-5 text-lg font-semibold'>
+							<ul className='flex flex-col gap-2 text-lg font-semibold'>
 								<li>
-									<Link href='/personal-accounts'>Personal Accounts</Link>
+									<Button href='/personal-accounts' styleClass='p-0'>
+										Personal Accounts
+									</Button>
 								</li>
 								<li>
-									<Link href='/cards'>Cards</Link>
+									<Button href='/cards' styleClass='p-0'>
+										Cards
+									</Button>
 								</li>
 								<li>
-									<Link href='/loans'>Loans</Link>
+									<Button href='/loans' styleClass='p-0'>
+										Loans
+									</Button>
 								</li>
 								<li>
-									<Link href='/mortgage'>Mortgage</Link>
+									<Button href='/mortgage' styleClass='p-0'>
+										Mortgage
+									</Button>
 								</li>
 								<li>
-									<Link href='/insurance'>Insurance</Link>
+									<Button href='/insurance' styleClass='p-0'>
+										Insurance
+									</Button>
 								</li>
 								<li>
-									<Link href='/safety-tips'>Safety Tips</Link>
+									<Button href='/safety-tips' styleClass='p-0'>
+										Safety Tips
+									</Button>
+								</li>
+								<li>
+									<Button href='/news' styleClass='p-0'>
+										News
+									</Button>
 								</li>
 							</ul>
 						</nav>
 					</div>
 				</div>
-				<div className='flex flex-col gap-5 my-5'>
-					<div className='flex gap-5 items-center justify-end'>
+				<div className='flex flex-col gap-5'>
+					<div className='flex gap-2 items-center justify-end'>
 						<div>
 							<Link href='/help'>Help</Link>
 						</div>
@@ -79,18 +105,31 @@ export default function Header() {
 						<div>
 							<Link href='/language'>Language</Link>
 						</div>
-						<div>
-							The current theme is: {theme}
-							<Button cta={() => setTheme('light')}>Light Mode</Button>
-							<Button cta={() => setTheme('dark')}>Dark Mode</Button>
+						<div className='grid'>
+							<div
+								className={`row-start-1 col-start-1 transition-width overflow-hidden ${
+									openTheme ? 'w-0' : 'w-full'
+								}`}
+							>
+								<div onClick={() => setOpenTheme(true)}>TTT</div>
+							</div>
+							<div
+								className={`flex row-start-1 col-start-1 transition-width overflow-hidden ${
+									openTheme ? 'w-full' : 'w-0'
+								}`}
+							>
+								<div onClick={() => selectTheme('light')}>L</div>
+								<div onClick={() => selectTheme('dark')}>D</div>
+								<div onClick={() => selectTheme('system')}>S</div>
+							</div>
 						</div>
 					</div>
 					<div className='flex justify-end items-center text-lg'>
 						<div className='flex gap-5'>
-							<Button href='/open-account'>
+							<Button href='/open-account' buttonLike={true}>
 								<div>Open Account</div>
 							</Button>
-							<Button href='/login'>
+							<Button href='/login' buttonLike={true}>
 								<div>Log In</div>
 							</Button>
 						</div>
@@ -98,27 +137,41 @@ export default function Header() {
 				</div>
 			</div>
 			<nav className='hidden md:block border-purple-600 border-b-2'>
-				<ul className='flex justify-between gap-10 text-xl font-semibold whitespace-nowrap'>
+				<ul className='flex justify-between gap-5 text-xl font-semibold whitespace-nowrap'>
 					<li>
-						<Link href='/personal-accounts'>Personal Accounts</Link>
+						<Button href='/personal-accounts' fillUp={true}>
+							Personal Accounts
+						</Button>
 					</li>
 					<li>
-						<Link href='/cards'>Cards</Link>
+						<Button href='/cards' fillUp={true}>
+							Cards
+						</Button>
 					</li>
 					<li>
-						<Link href='/loans'>Loans</Link>
+						<Button href='/loans' fillUp={true}>
+							Loans
+						</Button>
 					</li>
 					<li>
-						<Link href='/mortgage'>Mortgage</Link>
+						<Button href='/mortgage' fillUp={true}>
+							Mortgage
+						</Button>
 					</li>
 					<li>
-						<Link href='/insurance'>Insurance</Link>
+						<Button href='/insurance' fillUp={true}>
+							Insurance
+						</Button>
 					</li>
 					<li>
-						<Link href='/safety-tips'>Safety Tips</Link>
+						<Button href='/safety-tips' fillUp={true}>
+							Safety Tips
+						</Button>
 					</li>
 					<li>
-						<Link href='/news'>News</Link>
+						<Button href='/news' fillUp={true}>
+							News
+						</Button>
 					</li>
 				</ul>
 			</nav>
