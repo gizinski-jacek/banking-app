@@ -3,56 +3,80 @@
 @tailwind utilities;
 
 :root {
-	--bg-color: rgb(235, 220, 150);
-	--text-color: rgb(75, 0, 125);
-	--btn-bg-color: rgb(75, 0, 125);
-	--btn-text-color: rgb(0, 215, 200);
-	--shadow-color: rgb(255, 50, 100);
+	--cstm-bg: rgb(235, 220, 150);
+	--cstm-color: rgb(75, 0, 125);
+	--cstm-btn-bg: rgb(75, 0, 125);
+	--cstm-btn-color: rgb(0, 215, 200);
+	--cstm-shadow: rgb(180, 50, 75);
 }
 
 [data-theme='dark'] {
-	--bg-color: rgb(75, 0, 125);
-	--text-color: rgb(235, 220, 150);
-	--btn-bg-color: rgb(235, 220, 150);
-	--btn-text-color: rgb(180, 50, 75);
-	--shadow-color: rgb(0, 215, 200);
+	--cstm-bg: rgb(75, 0, 125);
+	--cstm-color: rgb(235, 220, 150);
+	--cstm-btn-bg: rgb(235, 220, 150);
+	--cstm-btn-color: rgb(180, 50, 75);
+	--cstm-shadow: rgb(0, 215, 200);
+}
+
+html * {
+	@apply transition-colors duration-200;
 }
 
 body {
-	color: var(--text-color);
-	background-color: var(--bg-color);
+	color: var(--cstm-color);
+	background-color: var(--cstm-bg);
 }
 
 a {
-	color: var(--btn-bg-color);
+	color: var(--cstm-color);
 	padding: 0.25rem 0.5rem;
 	font-weight: 700;
 	transition: all 0.15s ease-in-out;
 
+	&.fill-up {
+		border-radius: 0.5rem 0.5rem 0 0;
+		background: linear-gradient(to top, transparent 50% var(--cstm-color) 50%)
+			bottom;
+		background-size: 100% 200%;
+	}
+
 	&:hover {
+		filter: brightness(110%);
+
+		&.fill-up {
+			color: var(--cstm-btn-color);
+			border-radius: 0.5rem 0.5rem 0 0;
+			background: linear-gradient(
+					to top,
+					var(--cstm-color) 50%,
+					transparent 50%
+				)
+				bottom;
+			background-size: 100% 200%;
+		}
 	}
 
 	&:active {
-		filter: brightness(110%) !important;
-		box-shadow: 0 0 4px var(--shadow-color);
+		filter: brightness(125%);
 	}
 }
 
 button {
 	padding: 0.25rem 0.5rem;
 	font-weight: 700;
-	color: var(--btn-text-color);
-	background-color: var(--btn-bg-color) !important;
-	border: 2px solid var(--btn-text-color);
-	border-radius: 1rem;
+	color: var(--cstm-btn-color);
+	background-color: var(--cstm-btn-bg) !important;
+	border: 2px solid var(--cstm-btn-color);
+	border-radius: 0.5rem;
 	white-space: nowrap;
 	transition: 0.15s ease-in-out;
 
 	&:hover {
-		box-shadow: 0 1px 1px 1px var(--shadow-color);
+		filter: brightness(110%);
 	}
 
 	&.active {
+		filter: brightness(125%);
 	}
 }
 
@@ -92,11 +116,11 @@ h6 {
 input {
 	display: block;
 	padding: 2px 4px;
-	border: 2px solid var(--btn-text-color);
-	color: var(--text-color);
-	background-color: var(--bg-color);
+	border: 2px solid var(--cstm-btn-color);
+	color: var(--cstm-color);
+	background-color: var(--cstm-bg);
 
 	&:focus {
-		outline: 2px solid var(--btn-text-color);
+		outline: 2px solid var(--cstm-btn-color);
 	}
 }
