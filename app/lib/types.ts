@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export interface RegularAccFormData {
 	first_name: string;
@@ -7,8 +7,14 @@ export interface RegularAccFormData {
 	password: string;
 }
 
+export type RegularAccFormErrors = RegularAccFormData;
+
 export interface VIPAccFormData extends RegularAccFormData {
 	extra_funds: number;
+}
+
+export interface VIPAccFormErrors extends Omit<VIPAccFormData, 'extra_funds'> {
+	extra_funds: string;
 }
 
 export interface BusinessAccFormData extends RegularAccFormData {
@@ -16,18 +22,23 @@ export interface BusinessAccFormData extends RegularAccFormData {
 	address: string;
 }
 
+export type BusinessAccFormErrors = BusinessAccFormData;
+
 export interface LoginData {
-	account?: string;
+	accountID?: string;
 	password?: string;
 }
 
-export interface RegularAccModel extends RegularAccFormData {
-	_id: string;
-	createdAt: string;
-	updatedAt: string;
-	balance: Types.Decimal128;
+export interface AccountModel extends mongoose.Document {
+	accountID: string;
+	accountType: 'regular' | 'vip' | 'business';
+	createdAt: number;
+	updatedAt: number;
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+	balance?: Types.Decimal128;
+	companyName?: string;
+	address?: string;
 }
-
-export type VIPAccModel = RegularAccModel;
-
-export type BusinessAccModel = BusinessAccFormData & RegularAccModel;
