@@ -2,19 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { LoginData } from '../lib/types';
-import { loginData } from '../lib/defaults';
-import Button from '../components/Button';
+import { LoginData } from '../../lib/types';
+import { loginData } from '../../lib/defaults';
+import Button from '../../components/Button';
+import axios from 'axios';
 
 export default function Login() {
 	const router = useRouter();
 	const [formData, setFormData] = useState<LoginData>(loginData);
-	const [accountValid, setAccountValid] = useState<null | boolean | string>(
+	const [accountIDValid, setAccountIDValid] = useState<null | boolean | string>(
 		null
 	);
 	const [passwordValid, setPasswordValid] = useState<null | boolean | string>(
 		null
 	);
+	// refactor errors states
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -23,19 +25,23 @@ export default function Login() {
 
 	async function verifyAccount(data: LoginData) {
 		try {
-			// API request to check for ID in DB
-			// Toggle to password form on success
-			setAccountValid(true);
+			if (!data.accountID) {
+				setAccountIDValid('Provide valid account');
+			}
+			await axios.post('/api/login?cred=login', data);
+			setAccountIDValid(true);
 		} catch (error) {
 			console.log(error);
-			setAccountValid('Incorrect account');
+			setAccountIDValid('Incorrect account ID');
 		}
 	}
 
 	async function verifyPassword(data: LoginData) {
 		try {
-			// API request to check if password is valid
-			// Redirect to dashboard on success
+			if (!data.password) {
+				setPasswordValid('Provide valid password');
+			}
+			await axios.post('/api/login?cred=password', data);
 			router.push('/dashboard');
 		} catch (error) {
 			console.log(error);
@@ -44,22 +50,26 @@ export default function Login() {
 	}
 
 	return (
-		<div>
-			{!accountValid ? (
-				<form>
+		<div className='flex flex-col items-center gap-5 mx-auto'>
+			{!accountIDValid ? (
+				<form className='flex flex-col items-center gap-5 mx-auto text-center'>
 					<fieldset>
-						<label htmlFor='account'>Account ID</label>
+						<label htmlFor='accountID'>Account ID</label>
 						<input
+							className='text-center'
 							type='text'
-							id='account'
-							name='account'
-							value={formData.account}
+							id='accountID'
+							name='accountID'
+							value={formData.accountID}
+							minLength={8}
+							maxLength={64}
 							required
 							onChange={handleFormChange}
+							placeholder='Account ID'
 						/>
-						{typeof accountValid === 'string' && (
+						{typeof accountIDValid === 'string' && (
 							<p className='text-red-600 font-weight-semibold'>
-								{accountValid}
+								{accountIDValid}
 							</p>
 						)}
 					</fieldset>
@@ -79,6 +89,8 @@ export default function Login() {
 							id='password'
 							name='password'
 							value={formData.password}
+							minLength={8}
+							maxLength={128}
 							required
 							onChange={handleFormChange}
 						/>
@@ -96,8 +108,8 @@ export default function Login() {
 					</Button>
 				</form>
 			)}
-			<Button href='/' styleClass='my-3'>
-				{`<-`} Go Back
+			<Button href='/' buttonLike={true}>
+				{`<- Go Back To Home Page`}
 			</Button>
 		</div>
 	);

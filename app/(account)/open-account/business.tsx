@@ -1,20 +1,22 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { regularAccFormData } from '@/app/lib/defaults';
-import { RegularAccFormData } from '@/app/lib/types';
+import { businessAccFormData } from '@/app/lib/defaults';
+import { BusinessAccFormData, BusinessAccFormErrors } from '@/app/lib/types';
 import { useState } from 'react';
-import capitalize from '../lib/capitalize';
+import capitalize from '../../lib/capitalize';
 
 interface Props {
 	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
-	createAccount: (data: RegularAccFormData) => void;
+	createAccount: (data: BusinessAccFormData) => void;
 }
 
-export default function Regular({ changeAccountType, createAccount }: Props) {
+export default function Business({ changeAccountType, createAccount }: Props) {
 	const [formData, setFormData] =
-		useState<RegularAccFormData>(regularAccFormData);
-	const [formErrors, setFormErrors] = useState<RegularAccFormData | null>(null);
+		useState<BusinessAccFormData>(businessAccFormData);
+	const [formErrors, setFormErrors] = useState<BusinessAccFormErrors | null>(
+		null
+	);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -24,11 +26,11 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 		});
 	}
 
-	function verifyFields(data: RegularAccFormData) {
-		const formErrors = {} as RegularAccFormData;
+	function verifyFields(data: BusinessAccFormData) {
+		const formErrors = {} as BusinessAccFormData;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof RegularAccFormData] = `Invalid ${key}`;
+				formErrors[key as keyof BusinessAccFormData] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
@@ -42,7 +44,7 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>Regular Account</h2>
+				<h2 className='col-span-2'>Business Account</h2>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input
@@ -76,6 +78,42 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 					{formErrors?.last_name && (
 						<p className='text-red-600 font-weight-semibold'>
 							{capitalize(formErrors.last_name)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='company_name'>Company Name</label>
+					<input
+						type='text'
+						id='company_name'
+						name='company_name'
+						minLength={4}
+						maxLength={128}
+						value={formData.company_name}
+						required
+						onChange={handleFormChange}
+					/>
+					{formErrors?.company_name && (
+						<p className='text-red-600 font-weight-semibold'>
+							{capitalize(formErrors.company_name)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='address'>Address</label>
+					<input
+						type='text'
+						id='address'
+						name='address'
+						minLength={4}
+						maxLength={128}
+						value={formData.address}
+						required
+						onChange={handleFormChange}
+					/>
+					{formErrors?.address && (
+						<p className='text-red-600 font-weight-semibold'>
+							{capitalize(formErrors.address)}
 						</p>
 					)}
 				</fieldset>

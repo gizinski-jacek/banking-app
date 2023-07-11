@@ -2,9 +2,9 @@
 
 import Button from '@/app/components/Button';
 import { vipAccFormData } from '@/app/lib/defaults';
-import { VIPAccFormData } from '@/app/lib/types';
+import { VIPAccFormData, VIPAccFormErrors } from '@/app/lib/types';
 import { useState } from 'react';
-import capitalize from '../lib/capitalize';
+import capitalize from '../../lib/capitalize';
 
 interface Props {
 	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
@@ -13,7 +13,7 @@ interface Props {
 
 export default function Business({ changeAccountType, createAccount }: Props) {
 	const [formData, setFormData] = useState<VIPAccFormData>(vipAccFormData);
-	const [formErrors, setFormErrors] = useState<VIPAccFormData | null>(null);
+	const [formErrors, setFormErrors] = useState<VIPAccFormErrors | null>(null);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -24,10 +24,10 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 	}
 
 	function verifyFields(data: VIPAccFormData) {
-		const formErrors = {} as VIPAccFormData;
+		const formErrors = {} as VIPAccFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof VIPAccFormData] = `Invalid ${key}`;
+				formErrors[key as keyof VIPAccFormErrors] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {

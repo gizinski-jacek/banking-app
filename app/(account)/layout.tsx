@@ -3,5 +3,5 @@ export default function OpenAccountLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	return <div>{children}</div>;
+	return <>{children}</>;
 }
