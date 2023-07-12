@@ -80,21 +80,27 @@ export default function OpenAccount() {
 					<div className='flex flex-col gap-2'>
 						<h2>Regular Account</h2>
 						<p>Simple account for non-demanding users.</p>
-						<Button cta={() => changeAccountType('regular')}>
+						<Button
+							styleClass='mt-auto'
+							cta={() => changeAccountType('regular')}
+						>
 							Open Regular Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
 						<h2>VIP Account</h2>
 						<p>Special account with extra bells and whistles.</p>
-						<Button cta={() => changeAccountType('vip')}>
+						<Button styleClass='mt-auto' cta={() => changeAccountType('vip')}>
 							Open VIP Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
 						<h2>Business Account</h2>
 						<p>Best for brave entrepreneurs.</p>
-						<Button cta={() => changeAccountType('business')}>
+						<Button
+							styleClass='mt-auto'
+							cta={() => changeAccountType('business')}
+						>
 							Open Business Account
 						</Button>
 					</div>
