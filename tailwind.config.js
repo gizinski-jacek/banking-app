@@ -6,11 +6,7 @@ module.exports = {
 		'./app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
-		extend: {
-			transitionProperty: {
-				width: 'width',
-			},
-		},
+		extend: {},
 		colors: {
 			'cstm-bg': 'var(--cstm-bg)',
 			'cstm-color': 'var(--cstm-color)',
