@@ -2,8 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'next-themes';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+	children,
+	session,
+}: {
+	children: React.ReactNode;
+	session: Session | null | undefined;
+}) {
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
@@ -11,7 +19,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	if (!mounted) {
-		return <>{children}</>;
+		return null;
 	}
-	return <ThemeProvider>{children}</ThemeProvider>;
+
+	return (
+		<SessionProvider session={session}>
+			<ThemeProvider>{children}</ThemeProvider>
+		</SessionProvider>
+	);
 }
