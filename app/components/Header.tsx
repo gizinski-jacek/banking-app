@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import Button from './Button';
 import { useEffect, useState } from 'react';
-import hamburgerMenu from '../styles/Hamburger.module.scss';
 import { useTheme } from 'next-themes';
+import hamburgerMenu from '../styles/Hamburger.module.scss';
+import themeSelect from '../styles/ThemeSelect.module.scss';
 
 export default function Header() {
-	const [openMenu, setOpenMenu] = useState(false);
-	const [openTheme, setOpenTheme] = useState(false);
+	const [openHamMenu, setOpenHamMenu] = useState(false);
+	const [openSelect, setOpenSelect] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const { theme, setTheme } = useTheme();
 
@@ -22,7 +23,7 @@ export default function Header() {
 
 	function selectTheme(value: string) {
 		setTheme(value);
-		setOpenTheme(false);
+		setOpenSelect(false);
 	}
 
 	return (
@@ -36,13 +37,13 @@ export default function Header() {
 					</div>
 					<div
 						className='md:hidden relative'
-						onClick={() => setOpenMenu(!openMenu)}
+						onClick={() => setOpenHamMenu(!openHamMenu)}
 					>
 						<div
 							className={`${hamburgerMenu.icon} ${
 								hamburgerMenu.nav_icon
 							} overflow-hidden ease-in-out duration-300 ${
-								openMenu ? hamburgerMenu.open : ''
+								openHamMenu ? hamburgerMenu.open : ''
 							}`}
 						>
 							<span></span>
@@ -51,7 +52,7 @@ export default function Header() {
 						</div>
 						<nav
 							className={`${
-								openMenu ? 'max-h-screen' : 'max-h-0'
+								openHamMenu ? 'max-h-screen' : 'max-h-0'
 							} absolute top-100 left-0 overflow-hidden`}
 						>
 							<ul className='flex flex-col gap-2 text-lg font-semibold'>
@@ -105,22 +106,18 @@ export default function Header() {
 						<div>
 							<Link href='/language'>Language</Link>
 						</div>
-						<div className='grid'>
-							<div
-								className={`row-start-1 col-start-1 transition-width overflow-hidden ${
-									openTheme ? 'w-0' : 'w-full'
-								}`}
-							>
-								<div onClick={() => setOpenTheme(true)}>TTT</div>
+						<div
+							className={`${themeSelect['theme-select']} ${
+								openSelect ? `${themeSelect.open}` : ''
+							}`}
+						>
+							<div className={themeSelect.toggle}>
+								<div onClick={() => setOpenSelect(true)}>TT</div>
 							</div>
-							<div
-								className={`flex row-start-1 col-start-1 transition-width overflow-hidden ${
-									openTheme ? 'w-full' : 'w-0'
-								}`}
-							>
-								<div onClick={() => selectTheme('light')}>L</div>
-								<div onClick={() => selectTheme('dark')}>D</div>
-								<div onClick={() => selectTheme('system')}>S</div>
+							<div className={themeSelect.options}>
+								<div onClick={() => selectTheme('light')}>LL</div>
+								<div onClick={() => selectTheme('dark')}>DD</div>
+								<div onClick={() => selectTheme('system')}>SS</div>
 							</div>
 						</div>
 					</div>
