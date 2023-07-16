@@ -1,21 +1,28 @@
-// import connectMongo from '@/app/lib/mongoDB';
-
 import yupValidation, {
 	businessAccFormValidationSchema,
 	regularAccFormValidationSchema,
 	vipAccFormValidationSchema,
 } from '@/app/lib/yup';
-import connectMongo from '@/app/lib/mongoDB';
+import { uid } from 'uid';
+import bcryptjs from 'bcryptjs';
+import Account from '@/app/models/account';
+import connectDb from '@/app/lib/mongoDb';
+import {
+	NewBusAccountModel,
+	NewRegAccountModel,
+	NewVipAccountModel,
+} from '@/app/types/types';
 
 export async function POST(request: Request) {
 	try {
 		const accType = new URL(request.url).searchParams.get('accType');
 
 		if (!accType) {
+			return new Response(null, { status: 400 });
 		}
 
 		const body = await request.json();
-		const conn = await connectMongo('accounts');
+		await connectDb();
 
 		if (accType === 'regular') {
 			const { errors } = await yupValidation(
@@ -23,22 +30,38 @@ export async function POST(request: Request) {
 				body
 			);
 			if (errors) {
-				const res = new Response(errors, { status: 422 });
-				return res;
+				return new Response(errors, { status: 422 });
 			}
-			await conn.models.Regular_Account.create(body);
+			const hashedPassword = await bcryptjs.hash(body.password, 16);
+			const newAccount: NewRegAccountModel = new Account({
+				accountId: uid(16),
+				accountType: 'regular',
+				firstName: body.first_name,
+				lastName: body.last_name,
+				email: body.email,
+				password: hashedPassword,
+			});
+			const account = await newAccount.save();
+			return new Response(account.accountId);
 		}
 
 		if (accType === 'vip') {
 			const { errors } = await yupValidation(vipAccFormValidationSchema, body);
 			if (errors) {
-				const res = new Response(errors, { status: 422 });
-				return res;
+				return new Response(errors, { status: 422 });
 			}
-			await conn.models.VIP_Account.create({
-				...body,
+			const hashedPassword = await bcryptjs.hash(body.password, 16);
+			const newAccount: NewVipAccountModel = new Account({
+				accountId: uid(16),
+				accountType: 'vip',
+				firstName: body.first_name,
+				lastName: body.last_name,
+				email: body.email,
+				password: hashedPassword,
 				balance: body.extra_funds,
 			});
+			const account = await newAccount.save();
+			return new Response(account.accountId);
 		}
 
 		if (accType === 'business') {
@@ -47,14 +70,26 @@ export async function POST(request: Request) {
 				body
 			);
 			if (errors) {
-				const res = new Response(errors, { status: 422 });
-				return res;
+				return new Response(errors, { status: 422 });
 			}
-			await conn.models.Business_Account_Account.create(body);
+			const hashedPassword = await bcryptjs.hash(body.password, 16);
+			const newAccount: NewBusAccountModel = new Account({
+				accountId: uid(16),
+				accountType: 'business',
+				firstName: body.first_name,
+				lastName: body.last_name,
+				email: body.email,
+				password: hashedPassword,
+				companyName: body.company_name,
+				address: body.address,
+			});
+			const account = await newAccount.save();
+			return new Response(account.accountId);
 		}
 
-		return new Response(undefined, { status: 200 });
+		return new Response(null, { status: 200 });
 	} catch (error: any) {
+		console.log(error);
 		return error;
 	}
 }
