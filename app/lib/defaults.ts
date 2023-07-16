@@ -2,8 +2,8 @@ import {
 	BusinessAccFormData,
 	LoginData,
 	RegularAccFormData,
-	VIPAccFormData,
-} from './types';
+	VipAccFormData,
+} from '../types/types';
 
 export const regularAccFormData: RegularAccFormData = {
 	first_name: '',
@@ -12,7 +12,7 @@ export const regularAccFormData: RegularAccFormData = {
 	password: '',
 };
 
-export const vipAccFormData: VIPAccFormData = {
+export const vipAccFormData: VipAccFormData = {
 	first_name: '',
 	last_name: '',
 	email: '',
@@ -30,6 +30,6 @@ export const businessAccFormData: BusinessAccFormData = {
 };
 
 export const loginData: LoginData = {
-	account: '',
+	accountId: '',
 	password: '',
 };
