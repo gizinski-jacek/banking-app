@@ -1,22 +1,26 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { LoginData } from '../../lib/types';
+import { useEffect, useState } from 'react';
+import { LoginData } from '../../types/types';
 import { loginData } from '../../lib/defaults';
 import Button from '../../components/Button';
-import axios from 'axios';
+import { signIn, useSession } from 'next-auth/react';
+import Spinner from '@/app/components/Spinner';
 
 export default function Login() {
 	const router = useRouter();
+	const { status } = useSession();
 	const [formData, setFormData] = useState<LoginData>(loginData);
-	const [accountIDValid, setAccountIDValid] = useState<null | boolean | string>(
-		null
-	);
-	const [passwordValid, setPasswordValid] = useState<null | boolean | string>(
-		null
-	);
-	// refactor errors states
+	const [accountIdValid, setAccountIdValid] = useState<null | boolean>(null);
+	const [passwordValid, setPasswordValid] = useState<null | boolean>(null);
+	const [accountIdError, setAccountIdError] = useState<null | string>(null);
+	const [passwordError, setPasswordError] = useState<null | string>(null);
+
+	useEffect(() => {
+		if (status === 'loading') return;
+		if (status === 'authenticated') router.push('/dashboard');
+	}, [status, router]);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -25,51 +29,82 @@ export default function Login() {
 
 	async function verifyAccount(data: LoginData) {
 		try {
-			if (!data.accountID) {
-				setAccountIDValid('Provide valid account');
+			if (!data.accountId) {
+				setAccountIdError('Provide valid account');
 			}
-			await axios.post('/api/login?cred=login', data);
-			setAccountIDValid(true);
-		} catch (error) {
+			const res = await signIn('credentials-account', {
+				accountId: data.accountId,
+				redirect: false,
+			});
+			if (!res) {
+				setAccountIdError('Sign In error');
+				return;
+			}
+			// Temporary workaround, find better way to not set
+			// session but receive positive response !!!
+			if (res.error === 'acc-valid') {
+				setAccountIdValid(true);
+				return;
+			}
+			if (res.error) {
+				throw new Error(res.error);
+			}
+			setAccountIdValid(true);
+		} catch (error: any) {
 			console.log(error);
-			setAccountIDValid('Incorrect account ID');
+			setAccountIdError('Incorrect account Id');
 		}
 	}
 
 	async function verifyPassword(data: LoginData) {
 		try {
 			if (!data.password) {
-				setPasswordValid('Provide valid password');
+				setPasswordError('Provide valid password');
 			}
-			await axios.post('/api/login?cred=password', data);
+			const res = await signIn('credentials-password', {
+				...data,
+				redirect: false,
+			});
+			if (!res) {
+				setAccountIdError('Sign In error');
+				return;
+			}
+			if (res.error) {
+				throw new Error(res.error);
+			}
+			setAccountIdValid(true);
+			setPasswordValid(true);
 			router.push('/dashboard');
-		} catch (error) {
+		} catch (error: any) {
 			console.log(error);
-			setPasswordValid('Incorrect password');
+			setPasswordValid(false);
+			setPasswordError('Incorrect password');
 		}
 	}
 
-	return (
+	return status === 'loading' ? (
+		<Spinner />
+	) : (
 		<div className='flex flex-col items-center gap-5 mx-auto'>
-			{!accountIDValid ? (
+			{!accountIdValid ? (
 				<form className='flex flex-col items-center gap-5 mx-auto text-center'>
 					<fieldset>
-						<label htmlFor='accountID'>Account ID</label>
+						<label htmlFor='accountId'>Account ID</label>
 						<input
 							className='text-center'
 							type='text'
-							id='accountID'
-							name='accountID'
-							value={formData.accountID}
+							id='accountId'
+							name='accountId'
+							value={formData.accountId}
 							minLength={8}
 							maxLength={64}
 							required
 							onChange={handleFormChange}
 							placeholder='Account ID'
 						/>
-						{typeof accountIDValid === 'string' && (
-							<p className='text-red-600 font-weight-semibold'>
-								{accountIDValid}
+						{accountIdError && (
+							<p className='text-red-600 font-weight-semibold underline'>
+								{accountIdValid}
 							</p>
 						)}
 					</fieldset>
@@ -81,10 +116,11 @@ export default function Login() {
 					</Button>
 				</form>
 			) : (
-				<form>
+				<form className='flex flex-col items-center gap-5 mx-auto text-center'>
 					<fieldset>
 						<label htmlFor='password'>Password</label>
 						<input
+							className='text-center'
 							type='password'
 							id='password'
 							name='password'
@@ -94,8 +130,8 @@ export default function Login() {
 							required
 							onChange={handleFormChange}
 						/>
-						{typeof passwordValid === 'string' && (
-							<p className='text-red-600 font-weight-semibold'>
+						{passwordError && (
+							<p className='text-red-600 font-weight-semibold underline'>
 								{passwordValid}
 							</p>
 						)}
