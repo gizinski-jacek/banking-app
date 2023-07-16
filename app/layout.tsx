@@ -1,6 +1,9 @@
 import './globals.scss';
 import { Inter } from 'next/font/google';
 import Providers from './hooks/providers';
+import { Session } from 'next-auth';
+import { Suspense } from 'react';
+import Spinner from './components/Spinner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,14 +14,18 @@ export const metadata = {
 
 export default function RootLayout({
 	children,
+	session,
 }: {
 	children: React.ReactNode;
+	session: Session | null | undefined;
 }) {
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
 				<main className='flex flex-col gap-5 min-h-screen p-2 md:py-4 md:px-8 xl:py-8 xl:px-16'>
-					<Providers>{children}</Providers>
+					<Suspense fallback={<Spinner />}>
+						<Providers session={session}>{children}</Providers>
+					</Suspense>
 				</main>
 			</body>
 		</html>
