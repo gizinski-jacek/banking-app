@@ -1,9 +1,10 @@
 import * as Yup from 'yup';
 import {
 	BusinessAccFormData,
+	LoginData,
 	RegularAccFormData,
-	VIPAccFormData,
-} from './types';
+	VipAccFormData,
+} from '../types/types';
 
 export default async function yupValidation<T = Record<string, any>>(
 	scheme: Yup.Schema<T>,
@@ -38,7 +39,7 @@ export const regularAccFormValidationSchema: Yup.Schema<RegularAccFormData> =
 			.max(128, 'Password max 128 characters.'),
 	});
 
-export const vipAccFormValidationSchema: Yup.Schema<VIPAccFormData> =
+export const vipAccFormValidationSchema: Yup.Schema<VipAccFormData> =
 	Yup.object().shape({
 		first_name: Yup.string()
 			.required('First name is required.')
@@ -58,8 +59,8 @@ export const vipAccFormValidationSchema: Yup.Schema<VIPAccFormData> =
 			.max(128, 'Password max 128 characters.'),
 		extra_funds: Yup.number()
 			.required('Extra funds is required.')
-			.min(0, 'Extra funds min 0 characters.')
-			.max(1000000, 'Extra funds max 1000000 characters.'),
+			.min(0, 'Extra funds min 0.')
+			.max(1000000, 'Extra funds max 1000000.'),
 	});
 
 export const businessAccFormValidationSchema: Yup.Schema<BusinessAccFormData> =
@@ -89,3 +90,21 @@ export const businessAccFormValidationSchema: Yup.Schema<BusinessAccFormData> =
 			.min(4, 'Address min 4 characters.')
 			.max(128, 'Address max 128 characters.'),
 	});
+
+export const accountIdSchema: Yup.Schema<LoginData> = Yup.object().shape({
+	accountId: Yup.string()
+		.required('Account ID is required.')
+		.min(16, 'Account ID min 16 characters.')
+		.max(64, 'Account ID max 64 characters.'),
+});
+
+export const accountPasswordSchema: Yup.Schema<LoginData> = Yup.object().shape({
+	accountId: Yup.string()
+		.required('Account ID is required.')
+		.min(16, 'Account ID min 16 characters.')
+		.max(64, 'Account ID max 64 characters.'),
+	password: Yup.string()
+		.required('Password is required.')
+		.min(8, 'Password min 8 characters.')
+		.max(128, 'Password max 128 characters.'),
+});
