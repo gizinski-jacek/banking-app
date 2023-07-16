@@ -2,20 +2,25 @@
 
 import Button from '@/app/components/Button';
 import { businessAccFormData } from '@/app/lib/defaults';
-import { BusinessAccFormData, BusinessAccFormErrors } from '@/app/lib/types';
+import { BusinessAccFormData, BusinessAccFormErrors } from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
 
 interface Props {
 	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
 	createAccount: (data: BusinessAccFormData) => void;
+	errors: BusinessAccFormErrors;
 }
 
-export default function Business({ changeAccountType, createAccount }: Props) {
+export default function Business({
+	changeAccountType,
+	createAccount,
+	errors,
+}: Props) {
 	const [formData, setFormData] =
 		useState<BusinessAccFormData>(businessAccFormData);
 	const [formErrors, setFormErrors] = useState<BusinessAccFormErrors | null>(
-		null
+		errors || null
 	);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -58,7 +63,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.first_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.first_name)}
 						</p>
 					)}
@@ -76,7 +81,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.last_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.last_name)}
 						</p>
 					)}
@@ -94,7 +99,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.company_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.company_name)}
 						</p>
 					)}
@@ -112,7 +117,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.address && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.address)}
 						</p>
 					)}
@@ -130,7 +135,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.email && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.email)}
 						</p>
 					)}
@@ -148,7 +153,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.password && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.password)}
 						</p>
 					)}

@@ -2,18 +2,25 @@
 
 import Button from '@/app/components/Button';
 import { vipAccFormData } from '@/app/lib/defaults';
-import { VIPAccFormData, VIPAccFormErrors } from '@/app/lib/types';
+import { VipAccFormData, VipAccFormErrors } from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
 
 interface Props {
 	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
-	createAccount: (data: VIPAccFormData) => void;
+	createAccount: (data: VipAccFormData) => void;
+	errors: VipAccFormErrors;
 }
 
-export default function Business({ changeAccountType, createAccount }: Props) {
-	const [formData, setFormData] = useState<VIPAccFormData>(vipAccFormData);
-	const [formErrors, setFormErrors] = useState<VIPAccFormErrors | null>(null);
+export default function Business({
+	changeAccountType,
+	createAccount,
+	errors,
+}: Props) {
+	const [formData, setFormData] = useState<VipAccFormData>(vipAccFormData);
+	const [formErrors, setFormErrors] = useState<VipAccFormErrors | null>(
+		errors || null
+	);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const { name, value } = e.target;
@@ -23,13 +30,14 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 		});
 	}
 
-	function verifyFields(data: VIPAccFormData) {
-		const formErrors = {} as VIPAccFormErrors;
+	function verifyFields(data: VipAccFormData) {
+		const formErrors = {} as VipAccFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof VIPAccFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof VipAccFormErrors] = `Invalid ${key}`;
 			}
 		}
+		// Verify funds field to make sure its only 2 decimal places !!!
 		if (Object.keys(formErrors).length !== 0) {
 			setFormErrors(formErrors);
 		} else {
@@ -41,7 +49,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>VIP Account</h2>
+				<h2 className='col-span-2'>Vip Account</h2>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input
@@ -55,7 +63,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.first_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.first_name)}
 						</p>
 					)}
@@ -73,7 +81,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.last_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.last_name)}
 						</p>
 					)}
@@ -91,7 +99,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.email && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.email)}
 						</p>
 					)}
@@ -109,7 +117,7 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.password && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.password)}
 						</p>
 					)}
@@ -127,8 +135,8 @@ export default function Business({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.extra_funds && (
-						<p className='text-red-600 font-weight-semibold'>
-							{formErrors.extra_funds}
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.extra_funds)}
 						</p>
 					)}
 				</fieldset>

@@ -2,20 +2,25 @@
 
 import Button from '@/app/components/Button';
 import { regularAccFormData } from '@/app/lib/defaults';
-import { RegularAccFormData, RegularAccFormErrors } from '@/app/lib/types';
+import { RegularAccFormData, RegularAccFormErrors } from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
 
 interface Props {
 	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
 	createAccount: (data: RegularAccFormData) => void;
+	errors: RegularAccFormErrors;
 }
 
-export default function Regular({ changeAccountType, createAccount }: Props) {
+export default function Regular({
+	changeAccountType,
+	createAccount,
+	errors,
+}: Props) {
 	const [formData, setFormData] =
 		useState<RegularAccFormData>(regularAccFormData);
 	const [formErrors, setFormErrors] = useState<RegularAccFormErrors | null>(
-		null
+		errors || null
 	);
 
 	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -58,7 +63,7 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.first_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.first_name)}
 						</p>
 					)}
@@ -76,7 +81,7 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.last_name && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.last_name)}
 						</p>
 					)}
@@ -94,7 +99,7 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.email && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.email)}
 						</p>
 					)}
@@ -112,7 +117,7 @@ export default function Regular({ changeAccountType, createAccount }: Props) {
 						onChange={handleFormChange}
 					/>
 					{formErrors?.password && (
-						<p className='text-red-600 font-weight-semibold'>
+						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.password)}
 						</p>
 					)}
