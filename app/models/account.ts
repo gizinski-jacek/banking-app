@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
-import { AccountModel } from '../lib/types';
+import {
+	NewBusAccountModel,
+	NewRegAccountModel,
+	NewVipAccountModel,
+} from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const AccountSchema = new Schema<AccountModel>(
+const AccountSchema = new Schema<
+	NewRegAccountModel | NewVipAccountModel | NewBusAccountModel
+>(
 	{
-		_id: {
-			type: Schema.Types.ObjectId,
-			trim: true,
-			length: 16,
-			required: true,
-		},
-		accountID: {
+		accountId: {
 			type: String,
 			trim: true,
 			length: 16,
@@ -45,6 +45,7 @@ const AccountSchema = new Schema<AccountModel>(
 			required: true,
 		},
 		password: {
+			select: false,
 			type: String,
 			trim: true,
 			minlength: 8,
@@ -70,13 +71,15 @@ const AccountSchema = new Schema<AccountModel>(
 			},
 		},
 		balance: {
-			type: Schema.Types.Decimal128,
-			min: 0.0,
-			max: 1000000.0,
-			default: 100000.0,
+			type: String,
+			// Refactor to support decimals as number type by default !!!
+			default: '100000.00',
 		},
 	},
 	{ timestamps: true }
 );
 
-export default mongoose.model<AccountModel>('Account', AccountSchema);
+const Account =
+	mongoose.models['Account'] || mongoose.model('Account', AccountSchema);
+
+export default Account;
