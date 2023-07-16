@@ -9,11 +9,11 @@ export interface RegularAccFormData {
 
 export type RegularAccFormErrors = RegularAccFormData;
 
-export interface VIPAccFormData extends RegularAccFormData {
+export interface VipAccFormData extends RegularAccFormData {
 	extra_funds: number;
 }
 
-export interface VIPAccFormErrors extends Omit<VIPAccFormData, 'extra_funds'> {
+export interface VipAccFormErrors extends Omit<VipAccFormData, 'extra_funds'> {
 	extra_funds: string;
 }
 
@@ -25,20 +25,43 @@ export interface BusinessAccFormData extends RegularAccFormData {
 export type BusinessAccFormErrors = BusinessAccFormData;
 
 export interface LoginData {
-	accountID?: string;
+	accountId?: string;
 	password?: string;
 }
 
-export interface AccountModel extends mongoose.Document {
-	accountID: string;
-	accountType: 'regular' | 'vip' | 'business';
+export interface NewRegAccountModel extends mongoose.Document {
+	accountId: string;
+	accountType: 'regular';
 	createdAt: number;
 	updatedAt: number;
 	firstName: string;
 	lastName: string;
 	email: string;
 	password: string;
-	balance?: Types.Decimal128;
-	companyName?: string;
-	address?: string;
+}
+
+export interface NewVipAccountModel
+	extends Omit<NewRegAccountModel, 'accountType'> {
+	accountType: 'vip';
+	balance: string;
+}
+
+export interface NewBusAccountModel
+	extends Omit<NewRegAccountModel, 'accountType'> {
+	accountType: 'business';
+	companyName: string;
+	address: string;
+}
+
+export interface AccountDbDocument extends NewRegAccountModel {
+	_id: Types.ObjectId;
+	balance: string;
+}
+
+export interface SessionUser {
+	accountType: 'regular' | 'vip' | 'business';
+	accountId: string;
+	firstName: string;
+	lastName: string;
+	balance: number;
 }
