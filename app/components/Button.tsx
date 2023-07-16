@@ -3,6 +3,7 @@ import Link from 'next/link';
 interface CommonProps {
 	children?: React.ReactNode;
 	styleClass?: string;
+	styleObj?: React.CSSProperties;
 }
 
 type ConditionalProps =
@@ -30,6 +31,7 @@ type Props = CommonProps & ConditionalProps;
 export default function Button({
 	children,
 	styleClass,
+	styleObj,
 	href,
 	buttonLike = false,
 	fillUp = false,
@@ -43,6 +45,7 @@ export default function Button({
 					? 'rounded-lg border-2 border-red-700 bg-cstm-btn-bg text-cstm-btn-color capitalize hover:shadow hover:shadow-cstm-shadow'
 					: ''
 			} ${fillUp ? 'fill-up' : ''}`}
+			style={styleObj}
 		>
 			{children || 'Button'}
 		</Link>
@@ -52,7 +55,7 @@ export default function Button({
 			className={`rounded-lg border-1 border-black capitalize hover:shadow hover:shadow-cstm-shadow ${
 				styleClass || ''
 			}`}
-			onClick={() => (cta ? cta() : null)}
+			onClick={(e) => (cta ? cta(e) : null)}
 		>
 			{children || 'Button'}
 		</button>
