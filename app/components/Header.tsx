@@ -2,29 +2,12 @@
 
 import Link from 'next/link';
 import Button from './Button';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
+import { useState } from 'react';
 import hamburgerMenu from '../styles/Hamburger.module.scss';
-import themeSelect from '../styles/ThemeSelect.module.scss';
+import ThemeSelect from './ThemeSelect';
 
 export default function Header() {
 	const [openHamMenu, setOpenHamMenu] = useState(false);
-	const [openSelect, setOpenSelect] = useState(false);
-	const [mounted, setMounted] = useState(false);
-	const { theme, setTheme } = useTheme();
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) {
-		return null;
-	}
-
-	function selectTheme(value: string) {
-		setTheme(value);
-		setOpenSelect(false);
-	}
 
 	return (
 		<div className='flex flex-col gap-8'>
@@ -106,20 +89,8 @@ export default function Header() {
 						<div>
 							<Link href='/language'>Language</Link>
 						</div>
-						<div
-							className={`${themeSelect['theme-select']} ${
-								openSelect ? `${themeSelect.open}` : ''
-							}`}
-						>
-							<div className={themeSelect.toggle}>
-								<div onClick={() => setOpenSelect(true)}>TT</div>
-							</div>
-							<div className={themeSelect.options}>
-								<div onClick={() => selectTheme('light')}>LL</div>
-								<div onClick={() => selectTheme('dark')}>DD</div>
-								<div onClick={() => selectTheme('system')}>SS</div>
-							</div>
-						</div>
+						{/* fix animatyion !!! */}
+						<ThemeSelect />
 					</div>
 					<div className='flex justify-end items-center text-lg'>
 						<div className='flex gap-5'>
