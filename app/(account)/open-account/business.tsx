@@ -7,13 +7,13 @@ import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
 
 interface Props {
-	changeAccountType: (type: 'regular' | 'vip' | 'business' | null) => void;
+	changeUserType: (type: 'regular' | 'vip' | 'business' | null) => void;
 	createAccount: (data: BusinessAccFormData) => void;
 	errors: BusinessAccFormErrors;
 }
 
 export default function Business({
-	changeAccountType,
+	changeUserType,
 	createAccount,
 	errors,
 }: Props) {
@@ -165,7 +165,7 @@ export default function Business({
 					Submit
 				</Button>
 			</form>
-			<Button styleClass='my-3' cta={() => changeAccountType(null)}>
+			<Button styleClass='my-3' cta={() => changeUserType(null)}>
 				{`<-`} Open Different Account
 			</Button>
 		</div>

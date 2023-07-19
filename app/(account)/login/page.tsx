@@ -12,9 +12,9 @@ export default function Login() {
 	const router = useRouter();
 	const { status } = useSession();
 	const [formData, setFormData] = useState<LoginData>(loginData);
-	const [accountIdValid, setAccountIdValid] = useState<null | boolean>(null);
+	const [userIdValid, setUserIdValid] = useState<null | boolean>(null);
 	const [passwordValid, setPasswordValid] = useState<null | boolean>(null);
-	const [accountIdError, setAccountIdError] = useState<null | string>(null);
+	const [userIdError, setUserIdError] = useState<null | string>(null);
 	const [passwordError, setPasswordError] = useState<null | string>(null);
 
 	useEffect(() => {
@@ -29,30 +29,30 @@ export default function Login() {
 
 	async function verifyAccount(data: LoginData) {
 		try {
-			if (!data.accountId) {
-				setAccountIdError('Provide valid account');
+			if (!data.userId) {
+				setUserIdError('Provide valid account');
 			}
 			const res = await signIn('credentials-account', {
-				accountId: data.accountId,
+				userId: data.userId,
 				redirect: false,
 			});
 			if (!res) {
-				setAccountIdError('Sign In error');
+				setUserIdError('Sign In error');
 				return;
 			}
 			// Temporary workaround, find better way to not set
 			// session but receive positive response !!!
 			if (res.error === 'acc-valid') {
-				setAccountIdValid(true);
+				setUserIdValid(true);
 				return;
 			}
 			if (res.error) {
 				throw new Error(res.error);
 			}
-			setAccountIdValid(true);
+			setUserIdValid(true);
 		} catch (error: any) {
 			console.log(error);
-			setAccountIdError('Incorrect account Id');
+			setUserIdError('Incorrect login Id');
 		}
 	}
 
@@ -66,13 +66,13 @@ export default function Login() {
 				redirect: false,
 			});
 			if (!res) {
-				setAccountIdError('Sign In error');
+				setUserIdError('Sign In error');
 				return;
 			}
 			if (res.error) {
 				throw new Error(res.error);
 			}
-			setAccountIdValid(true);
+			setUserIdValid(true);
 			setPasswordValid(true);
 			router.push('/dashboard');
 		} catch (error: any) {
@@ -86,25 +86,25 @@ export default function Login() {
 		<Spinner />
 	) : (
 		<div className='flex flex-col items-center gap-5 mx-auto'>
-			{!accountIdValid ? (
+			{!userIdValid ? (
 				<form className='flex flex-col items-center gap-5 mx-auto text-center'>
 					<fieldset>
-						<label htmlFor='accountId'>Account ID</label>
+						<label htmlFor='userId'>Account ID</label>
 						<input
 							className='text-center'
 							type='text'
-							id='accountId'
-							name='accountId'
-							value={formData.accountId}
+							id='userId'
+							name='userId'
+							value={formData.userId}
 							minLength={8}
 							maxLength={64}
 							required
 							onChange={handleFormChange}
-							placeholder='Account ID'
+							placeholder='Login ID'
 						/>
-						{accountIdError && (
+						{userIdError && (
 							<p className='text-red-600 font-weight-semibold underline'>
-								{accountIdValid}
+								{userIdValid}
 							</p>
 						)}
 					</fieldset>

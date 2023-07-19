@@ -22,10 +22,10 @@ export default function OpenAccount() {
 	);
 	const [formErrors, setFormErrors] = useState<any | null>(null);
 	const [fetching, setFetching] = useState(false);
-	const [accountId, setAccountId] = useState<null | string>(null);
+	const [userId, setUserId] = useState<null | string>(null);
 	const router = useRouter();
 
-	function changeAccountType(type: 'regular' | 'vip' | 'business' | null) {
+	function changeUserType(type: 'regular' | 'vip' | 'business' | null) {
 		setAccType(type);
 	}
 
@@ -45,7 +45,7 @@ export default function OpenAccount() {
 				`/api/open-account?accType=${accType}`,
 				data
 			);
-			setAccountId(res.data);
+			setUserId(res.data);
 			setFetching(false);
 		} catch (error: any) {
 			console.log(error);
@@ -56,8 +56,8 @@ export default function OpenAccount() {
 
 	function dismissModal(e: React.MouseEvent) {
 		e.stopPropagation();
-		if (accountId) {
-			setAccountId(null);
+		if (userId) {
+			setUserId(null);
 			router.push('/login');
 		}
 		if (formErrors) {
@@ -69,11 +69,11 @@ export default function OpenAccount() {
 	return (
 		<div className='flex flex-col items-center gap-10'>
 			{fetching && <Spinner />}
-			<Modal show={accountId || formErrors} dismiss={dismissModal}>
-				{accountId ? (
+			<Modal show={userId || formErrors} dismiss={dismissModal}>
+				{userId ? (
 					<>
-						<p>Your account Id:</p>
-						<h3>{accountId}</h3>
+						<p>Your login Id:</p>
+						<h3>{userId}</h3>
 						<p>Make sure you remember it.</p>
 					</>
 				) : formErrors ? (
@@ -88,7 +88,7 @@ export default function OpenAccount() {
 					}`}
 				>
 					<Regular
-						changeAccountType={changeAccountType}
+						changeUserType={changeUserType}
 						createAccount={createAccount}
 						errors={formErrors}
 					/>
@@ -99,7 +99,7 @@ export default function OpenAccount() {
 					}`}
 				>
 					<Vip
-						changeAccountType={changeAccountType}
+						changeUserType={changeUserType}
 						createAccount={createAccount}
 						errors={formErrors}
 					/>
@@ -110,7 +110,7 @@ export default function OpenAccount() {
 					}`}
 				>
 					<Business
-						changeAccountType={changeAccountType}
+						changeUserType={changeUserType}
 						createAccount={createAccount}
 						errors={formErrors}
 					/>
@@ -123,27 +123,21 @@ export default function OpenAccount() {
 					<div className='flex flex-col gap-2'>
 						<h2>Regular Account</h2>
 						<p>Simple account for non-demanding users.</p>
-						<Button
-							styleClass='mt-auto'
-							cta={() => changeAccountType('regular')}
-						>
+						<Button styleClass='mt-auto' cta={() => changeUserType('regular')}>
 							Open Regular Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
 						<h2>Vip Account</h2>
 						<p>Special account with extra bells and whistles.</p>
-						<Button styleClass='mt-auto' cta={() => changeAccountType('vip')}>
+						<Button styleClass='mt-auto' cta={() => changeUserType('vip')}>
 							Open Vip Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
 						<h2>Business Account</h2>
 						<p>Best for brave entrepreneurs.</p>
-						<Button
-							styleClass='mt-auto'
-							cta={() => changeAccountType('business')}
-						>
+						<Button styleClass='mt-auto' cta={() => changeUserType('business')}>
 							Open Business Account
 						</Button>
 					</div>
