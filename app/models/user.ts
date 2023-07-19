@@ -31,6 +31,41 @@ const UserSchema = new Schema<
 			maxlength: 32,
 			required: true,
 		},
+		birthDate: {
+			type: String,
+			trim: true,
+			minlength: 4,
+			maxlength: 32,
+			required: true,
+		},
+		city: {
+			type: String,
+			trim: true,
+			minlength: 4,
+			maxlength: 32,
+			required: true,
+		},
+		address: {
+			type: String,
+			trim: true,
+			minlength: 4,
+			maxlength: 32,
+			required: true,
+		},
+		countryCallingCode: {
+			type: Number,
+			trim: true,
+			minlength: 1,
+			maxlength: 3,
+			required: true,
+		},
+		phoneNumber: {
+			type: Number,
+			trim: true,
+			minlength: 4,
+			maxlength: 13,
+			required: true,
+		},
 		email: {
 			type: String,
 			trim: true,
@@ -46,24 +81,7 @@ const UserSchema = new Schema<
 			maxlength: 128,
 			required: true,
 		},
-		companyName: {
-			type: String,
-			trim: true,
-			minlength: 8,
-			maxlength: 64,
-			required: function () {
-				return this.userType === 'business';
-			},
-		},
-		companyAddress: {
-			type: String,
-			trim: true,
-			minlength: 8,
-			maxlength: 128,
-			required: function () {
-				return this.userType === 'business';
-			},
-		},
+		accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
 	},
 	{ timestamps: true }
 );
