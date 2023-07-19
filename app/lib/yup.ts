@@ -91,15 +91,15 @@ export const businessAccFormValidationSchema: Yup.Schema<BusinessAccFormData> =
 			.max(128, 'Address max 128 characters.'),
 	});
 
-export const accountIdSchema: Yup.Schema<LoginData> = Yup.object().shape({
-	accountId: Yup.string()
+export const userIdSchema: Yup.Schema<LoginData> = Yup.object().shape({
+	userId: Yup.string()
 		.required('Account ID is required.')
 		.min(16, 'Account ID min 16 characters.')
 		.max(64, 'Account ID max 64 characters.'),
 });
 
 export const accountPasswordSchema: Yup.Schema<LoginData> = Yup.object().shape({
-	accountId: Yup.string()
+	userId: Yup.string()
 		.required('Account ID is required.')
 		.min(16, 'Account ID min 16 characters.')
 		.max(64, 'Account ID max 64 characters.'),
