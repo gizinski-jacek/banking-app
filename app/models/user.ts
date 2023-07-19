@@ -1,26 +1,20 @@
 import mongoose from 'mongoose';
 import {
-	NewBusAccountModel,
-	NewRegAccountModel,
-	NewVipAccountModel,
+	BusinessUserModel,
+	RegularUserModel,
+	VipUserModel,
 } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const AccountSchema = new Schema<
-	NewRegAccountModel | NewVipAccountModel | NewBusAccountModel
+const UserSchema = new Schema<
+	RegularUserModel | VipUserModel | BusinessUserModel
 >(
 	{
-		accountId: {
+		userId: {
 			type: String,
 			trim: true,
 			length: 16,
-			required: true,
-		},
-		accountType: {
-			type: String,
-			enum: ['regular', 'vip', 'business'],
-			trim: true,
 			required: true,
 		},
 		firstName: {
@@ -58,28 +52,22 @@ const AccountSchema = new Schema<
 			minlength: 8,
 			maxlength: 64,
 			required: function () {
-				return this.accountType === 'business';
+				return this.userType === 'business';
 			},
 		},
-		address: {
+		companyAddress: {
 			type: String,
 			trim: true,
 			minlength: 8,
 			maxlength: 128,
 			required: function () {
-				return this.accountType === 'business';
+				return this.userType === 'business';
 			},
-		},
-		balance: {
-			type: String,
-			// Refactor to support decimals as number type by default !!!
-			default: '100000.00',
 		},
 	},
 	{ timestamps: true }
 );
 
-const Account =
-	mongoose.models['Account'] || mongoose.model('Account', AccountSchema);
+const Account = mongoose.models['User'] || mongoose.model('User', UserSchema);
 
 export default Account;
