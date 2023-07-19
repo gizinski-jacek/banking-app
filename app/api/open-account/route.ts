@@ -3,14 +3,14 @@ import yupValidation, {
 	regularAccFormValidationSchema,
 	vipAccFormValidationSchema,
 } from '@/app/lib/yup';
-import { uid } from 'uid';
+import { customAlphabet } from 'nanoid';
 import bcryptjs from 'bcryptjs';
-import Account from '@/app/models/account';
+import Account from '@/app/models/user';
 import connectDb from '@/app/lib/mongoDb';
 import {
-	NewBusAccountModel,
-	NewRegAccountModel,
-	NewVipAccountModel,
+	BusinessUserModel,
+	RegularUserModel,
+	VipUserModel,
 } from '@/app/types/types';
 
 export async function POST(request: Request) {
@@ -23,6 +23,7 @@ export async function POST(request: Request) {
 
 		const body = await request.json();
 		await connectDb();
+		const nanoid = customAlphabet('1234567890', 12);
 
 		if (accType === 'regular') {
 			const { errors } = await yupValidation(
@@ -33,16 +34,15 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: NewRegAccountModel = new Account({
-				accountId: uid(16),
-				accountType: 'regular',
+			const newAccount: RegularUserModel = new Account({
+				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
 				email: body.email,
 				password: hashedPassword,
 			});
 			const account = await newAccount.save();
-			return new Response(account.accountId);
+			return new Response(account.userId);
 		}
 
 		if (accType === 'vip') {
@@ -51,9 +51,8 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: NewVipAccountModel = new Account({
-				accountId: uid(16),
-				accountType: 'vip',
+			const newAccount: VipUserModel = new Account({
+				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
 				email: body.email,
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
 				balance: body.extra_funds,
 			});
 			const account = await newAccount.save();
-			return new Response(account.accountId);
+			return new Response(account.userId);
 		}
 
 		if (accType === 'business') {
@@ -73,9 +72,8 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: NewBusAccountModel = new Account({
-				accountId: uid(16),
-				accountType: 'business',
+			const newAccount: BusinessUserModel = new Account({
+				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
 				email: body.email,
@@ -84,7 +82,7 @@ export async function POST(request: Request) {
 				address: body.address,
 			});
 			const account = await newAccount.save();
-			return new Response(account.accountId);
+			return new Response(account.userId);
 		}
 
 		return new Response(null, { status: 200 });
