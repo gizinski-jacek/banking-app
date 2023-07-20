@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { vipAccFormDefaults } from '@/app/lib/defaults';
+import { vipUserFormDefaults } from '@/app/lib/defaults';
 import {
-	VipAccFormData,
-	VipAccFormErrors,
+	VipUserFormData,
+	VipUserFormErrors,
 	supportedCurrencies,
 } from '@/app/types/types';
 import { useState } from 'react';
@@ -13,8 +13,8 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: VipAccFormData) => void;
-	errors: VipAccFormErrors;
+	createAccount: (data: VipUserFormData) => void;
+	errors: VipUserFormErrors;
 }
 
 export default function Business({
@@ -22,8 +22,9 @@ export default function Business({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] = useState<VipAccFormData>(vipAccFormDefaults);
-	const [formErrors, setFormErrors] = useState<VipAccFormErrors | null>(
+	const [formData, setFormData] =
+		useState<VipUserFormData>(vipUserFormDefaults);
+	const [formErrors, setFormErrors] = useState<VipUserFormErrors | null>(
 		errors || null
 	);
 
@@ -38,11 +39,11 @@ export default function Business({
 		});
 	}
 
-	function verifyFields(data: VipAccFormData) {
-		const formErrors = {} as VipAccFormErrors;
+	function verifyFields(data: VipUserFormData) {
+		const formErrors = {} as VipUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof VipAccFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof VipUserFormErrors] = `Invalid ${key}`;
 			}
 		}
 		// TODO: Verify funds field to make sure its only 2 decimal places !!!
@@ -55,7 +56,7 @@ export default function Business({
 	}
 
 	function clearForm() {
-		setFormData(vipAccFormDefaults);
+		setFormData(vipUserFormDefaults);
 	}
 
 	return (
