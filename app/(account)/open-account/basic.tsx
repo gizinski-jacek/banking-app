@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { basicAccFormDefaults } from '@/app/lib/defaults';
+import { basicUserFormDefaults } from '@/app/lib/defaults';
 import {
-	BasicAccFormData,
-	BasicAccFormErrors,
+	BasicUserFormData,
+	BasicUserFormErrors,
 	supportedCurrencies,
 } from '@/app/types/types';
 import { useState } from 'react';
@@ -13,8 +13,8 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: BasicAccFormData) => void;
-	errors: BasicAccFormErrors;
+	createAccount: (data: BasicUserFormData) => void;
+	errors: BasicUserFormErrors;
 }
 
 export default function Basic({
@@ -22,9 +22,10 @@ export default function Basic({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] =
-		useState<BasicAccFormData>(basicAccFormDefaults);
-	const [formErrors, setFormErrors] = useState<BasicAccFormErrors | null>(
+	const [formData, setFormData] = useState<BasicUserFormData>(
+		basicUserFormDefaults
+	);
+	const [formErrors, setFormErrors] = useState<BasicUserFormErrors | null>(
 		errors || null
 	);
 
@@ -38,11 +39,11 @@ export default function Basic({
 		});
 	}
 
-	function verifyFields(data: BasicAccFormData) {
-		const formErrors = {} as BasicAccFormErrors;
+	function verifyFields(data: BasicUserFormData) {
+		const formErrors = {} as BasicUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof BasicAccFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
@@ -54,7 +55,7 @@ export default function Basic({
 	}
 
 	function clearForm() {
-		setFormData(basicAccFormDefaults);
+		setFormData(basicUserFormDefaults);
 	}
 
 	return (

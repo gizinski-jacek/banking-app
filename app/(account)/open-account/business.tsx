@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { businessAccFormDefaults } from '@/app/lib/defaults';
+import { businessUserFormDefaults } from '@/app/lib/defaults';
 import {
-	BusinessAccFormData,
-	BusinessAccFormErrors,
+	BusinessUserFormData,
+	BusinessUserFormErrors,
 	supportedCurrencies,
 } from '@/app/types/types';
 import { useState } from 'react';
@@ -13,8 +13,8 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: BusinessAccFormData) => void;
-	errors: BusinessAccFormErrors;
+	createAccount: (data: BusinessUserFormData) => void;
+	errors: BusinessUserFormErrors;
 }
 
 export default function Business({
@@ -22,10 +22,10 @@ export default function Business({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] = useState<BusinessAccFormData>(
-		businessAccFormDefaults
+	const [formData, setFormData] = useState<BusinessUserFormData>(
+		businessUserFormDefaults
 	);
-	const [formErrors, setFormErrors] = useState<BusinessAccFormErrors | null>(
+	const [formErrors, setFormErrors] = useState<BusinessUserFormErrors | null>(
 		errors || null
 	);
 
@@ -39,11 +39,11 @@ export default function Business({
 		});
 	}
 
-	function verifyFields(data: BusinessAccFormData) {
-		const formErrors = {} as BusinessAccFormErrors;
+	function verifyFields(data: BusinessUserFormData) {
+		const formErrors = {} as BusinessUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof BusinessAccFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof BusinessUserFormErrors] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
@@ -55,7 +55,7 @@ export default function Business({
 	}
 
 	function clearForm() {
-		setFormData(businessAccFormDefaults);
+		setFormData(businessUserFormDefaults);
 	}
 
 	return (
