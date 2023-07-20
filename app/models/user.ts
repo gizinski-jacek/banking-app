@@ -1,15 +1,9 @@
 import mongoose from 'mongoose';
-import {
-	BusinessUserModel,
-	RegularUserModel,
-	VipUserModel,
-} from '../types/types';
+import { UserSchema } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema<
-	RegularUserModel | VipUserModel | BusinessUserModel
->(
+const UserSchema = new Schema<UserSchema>(
 	{
 		userId: {
 			type: String,
@@ -34,8 +28,8 @@ const UserSchema = new Schema<
 		birthDate: {
 			type: String,
 			trim: true,
-			minlength: 4,
-			maxlength: 32,
+			minlength: 8,
+			maxlength: 10,
 			required: true,
 		},
 		city: {
@@ -49,12 +43,14 @@ const UserSchema = new Schema<
 			type: String,
 			trim: true,
 			minlength: 4,
-			maxlength: 32,
+			maxlength: 64,
 			required: true,
 		},
 		countryCallingCode: {
 			type: Number,
 			trim: true,
+			min: 0,
+			max: 999,
 			minlength: 1,
 			maxlength: 3,
 			required: true,
@@ -62,8 +58,10 @@ const UserSchema = new Schema<
 		phoneNumber: {
 			type: Number,
 			trim: true,
-			minlength: 4,
-			maxlength: 13,
+			min: 0o0000,
+			max: 999999999999999,
+			minlength: 5,
+			maxlength: 15,
 			required: true,
 		},
 		email: {
@@ -81,11 +79,11 @@ const UserSchema = new Schema<
 			maxlength: 128,
 			required: true,
 		},
-		accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
+		accounts: [{ type: Schema.Types.ObjectId, ref: 'Account', default: [] }],
 	},
 	{ timestamps: true }
 );
 
-const Account = mongoose.models['User'] || mongoose.model('User', UserSchema);
+const User = mongoose.models['User'] || mongoose.model('User', UserSchema);
 
-export default Account;
+export default User;
