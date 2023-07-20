@@ -1,17 +1,19 @@
 import yupValidation, {
 	businessAccFormValidationSchema,
-	regularAccFormValidationSchema,
+	basicAccFormValidationSchema,
 	vipAccFormValidationSchema,
 } from '@/app/lib/yup';
 import { customAlphabet } from 'nanoid';
 import bcryptjs from 'bcryptjs';
-import Account from '@/app/models/user';
+import User from '@/app/models/user';
 import connectDb from '@/app/lib/mongoDb';
 import {
-	BusinessUserModel,
-	RegularUserModel,
-	VipUserModel,
+	AccountModel,
+	AccountSchema,
+	UserModel,
+	UserSchema,
 } from '@/app/types/types';
+import Account from '@/app/models/account';
 
 export async function POST(request: Request) {
 	try {
@@ -25,24 +27,35 @@ export async function POST(request: Request) {
 		await connectDb();
 		const nanoid = customAlphabet('1234567890', 12);
 
-		if (accType === 'regular') {
+		if (accType === 'basic') {
 			const { errors } = await yupValidation(
-				regularAccFormValidationSchema,
+				basicAccFormValidationSchema,
 				body
 			);
 			if (errors) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: RegularUserModel = new Account({
+			const newAccount = new Account<AccountSchema>({
+				accountType: 'basic',
+				currency: body.currency,
+			});
+			const account: AccountModel = await newAccount.save();
+			const newUser = new User<UserSchema>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
+				birthDate: body.birth_date,
+				city: body.city,
+				address: body.address,
+				countryCallingCode: body.country_calling_code,
+				phoneNumber: body.phone_number,
 				email: body.email,
 				password: hashedPassword,
+				accounts: [account._id],
 			});
-			const account = await newAccount.save();
-			return new Response(account.userId);
+			const user: UserModel = await newUser.save();
+			return new Response(user.userId);
 		}
 
 		if (accType === 'vip') {
@@ -51,16 +64,27 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: VipUserModel = new Account({
+			const newAccount = new Account<AccountSchema>({
+				accountType: 'vip',
+				currency: body.currency,
+				balance: body.extra_funds,
+			});
+			const account: AccountModel = await newAccount.save();
+			const newUser = new User<UserSchema>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
+				birthDate: body.birth_date,
+				city: body.city,
+				address: body.address,
+				countryCallingCode: body.country_calling_code,
+				phoneNumber: body.phone_number,
 				email: body.email,
 				password: hashedPassword,
-				balance: body.extra_funds,
+				accounts: [account._id],
 			});
-			const account = await newAccount.save();
-			return new Response(account.userId);
+			const user: UserModel = await newUser.save();
+			return new Response(user.userId);
 		}
 
 		if (accType === 'business') {
@@ -72,17 +96,29 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount: BusinessUserModel = new Account({
+			const newAccount = new Account<AccountSchema>({
+				accountType: 'business',
+				companyName: body.company_name,
+				companyCity: body.company_city,
+				companyAddress: body.company_name,
+				currency: body.currency,
+			});
+			const account: AccountModel = await newAccount.save();
+			const newUser = new User<UserSchema>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
+				birthDate: body.birth_date,
+				city: body.city,
+				address: body.address,
+				countryCallingCode: body.country_calling_code,
+				phoneNumber: body.phone_number,
 				email: body.email,
 				password: hashedPassword,
-				companyName: body.company_name,
-				address: body.address,
+				accounts: [account._id],
 			});
-			const account = await newAccount.save();
-			return new Response(account.userId);
+			const user: UserModel = await newUser.save();
+			return new Response(user.userId);
 		}
 
 		return new Response(null, { status: 200 });
