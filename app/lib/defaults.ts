@@ -1,51 +1,33 @@
 import {
 	BusinessAccFormData,
 	LoginData,
-	RegularAccFormData,
+	BasicAccFormData,
 	VipAccFormData,
 } from '../types/types';
 
-export const regularAccFormData: RegularAccFormData = {
+export const basicAccFormDefaults: BasicAccFormData = {
 	first_name: '',
 	last_name: '',
-	birth_place: '',
+	birth_date: '',
 	city: '',
 	address: '',
 	country_calling_code: 0,
 	phone_number: 0,
-	email: '',
 	currency: '',
+	email: '',
 	password: '',
 };
 
-export const vipAccFormData: VipAccFormData = {
-	first_name: '',
-	last_name: '',
-	birth_place: '',
-	city: '',
-	address: '',
-	country_calling_code: 0,
-	phone_number: 0,
-	email: '',
-	currency: '',
-	password: '',
-	extra_funds: 0.0,
+export const vipAccFormDefaults: VipAccFormData = {
+	...basicAccFormDefaults,
+	extra_funds: 0,
 };
 
-export const businessAccFormData: BusinessAccFormData = {
-	first_name: '',
-	last_name: '',
-	birth_place: '',
-	city: '',
-	address: '',
-	country_calling_code: 0,
-	phone_number: 0,
+export const businessAccFormDefaults: BusinessAccFormData = {
+	...basicAccFormDefaults,
 	company_name: '',
 	company_city: '',
 	company_address: '',
-	email: '',
-	currency: '',
-	password: '',
 };
 
 export const loginData: LoginData = {
