@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { regularAccFormData } from '@/app/lib/defaults';
+import { basicAccFormData } from '@/app/lib/defaults';
 import {
-	RegularAccFormData,
-	RegularAccFormErrors,
+	BasicAccFormData,
+	BasicAccFormErrors,
 	supportedCurrencies,
 } from '@/app/types/types';
 import { useState } from 'react';
@@ -12,19 +12,18 @@ import capitalize from '../../lib/capitalize';
 import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
-	changeUserType: (type: 'regular' | 'vip' | 'business' | null) => void;
-	createAccount: (data: RegularAccFormData) => void;
-	errors: RegularAccFormErrors;
+	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
+	createAccount: (data: BasicAccFormData) => void;
+	errors: BasicAccFormErrors;
 }
 
-export default function Regular({
+export default function Basic({
 	changeUserType,
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] =
-		useState<RegularAccFormData>(regularAccFormData);
-	const [formErrors, setFormErrors] = useState<RegularAccFormErrors | null>(
+	const [formData, setFormData] = useState<BasicAccFormData>(basicAccFormData);
+	const [formErrors, setFormErrors] = useState<BasicAccFormErrors | null>(
 		errors || null
 	);
 
@@ -38,11 +37,11 @@ export default function Regular({
 		});
 	}
 
-	function verifyFields(data: RegularAccFormData) {
-		const formErrors = {} as RegularAccFormErrors;
+	function verifyFields(data: BasicAccFormData) {
+		const formErrors = {} as BasicAccFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof RegularAccFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof BasicAccFormErrors] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
@@ -56,7 +55,7 @@ export default function Regular({
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>Regular Account</h2>
+				<h2 className='col-span-2'>Basic Account</h2>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input
