@@ -1,6 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 
-export interface BasicAccFormData {
+export interface BasicUserFormData {
 	first_name: string;
 	last_name: string;
 	birth_date: string;
@@ -13,27 +13,27 @@ export interface BasicAccFormData {
 	password: string;
 }
 
-export interface VipAccFormData extends BasicAccFormData {
+export interface VipUserFormData extends BasicUserFormData {
 	extra_funds: number;
 }
 
-export interface BusinessAccFormData extends BasicAccFormData {
+export interface BusinessUserFormData extends BasicUserFormData {
 	company_name: string;
 	company_city: string;
 	company_address: string;
 }
 
-export interface BasicAccFormErrors
-	extends Omit<BasicAccFormData, 'country_calling_code' | 'phone_number'> {
+export interface BasicUserFormErrors
+	extends Omit<BasicUserFormData, 'country_calling_code' | 'phone_number'> {
 	country_calling_code: string;
 	phone_number: string;
 }
 
-export interface VipAccFormErrors extends BasicAccFormErrors {
+export interface VipUserFormErrors extends BasicUserFormErrors {
 	extra_funds: string;
 }
 
-export interface BusinessAccFormErrors extends BasicAccFormErrors {
+export interface BusinessUserFormErrors extends BasicUserFormErrors {
 	company_name: string;
 	company_city: string;
 	company_address: string;
