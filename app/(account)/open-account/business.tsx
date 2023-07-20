@@ -2,9 +2,14 @@
 
 import Button from '@/app/components/Button';
 import { businessAccFormData } from '@/app/lib/defaults';
-import { BusinessAccFormData, BusinessAccFormErrors } from '@/app/types/types';
+import {
+	BusinessAccFormData,
+	BusinessAccFormErrors,
+	supportedCurrencies,
+} from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
+import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'regular' | 'vip' | 'business' | null) => void;
@@ -23,7 +28,9 @@ export default function Business({
 		errors || null
 	);
 
-	function handleFormChange(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleFormChange(
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) {
 		const { name, value } = e.target;
 		setFormData({
 			...formData,
@@ -32,10 +39,10 @@ export default function Business({
 	}
 
 	function verifyFields(data: BusinessAccFormData) {
-		const formErrors = {} as BusinessAccFormData;
+		const formErrors = {} as BusinessAccFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof BusinessAccFormData] = `Invalid ${key}`;
+				formErrors[key as keyof BusinessAccFormErrors] = `Invalid ${key}`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
@@ -61,6 +68,7 @@ export default function Business({
 						value={formData.first_name}
 						required
 						onChange={handleFormChange}
+						placeholder='First Name'
 					/>
 					{formErrors?.first_name && (
 						<p className='text-red-600 font-weight-semibold underline'>
@@ -79,6 +87,7 @@ export default function Business({
 						value={formData.last_name}
 						required
 						onChange={handleFormChange}
+						placeholder='Last Name'
 					/>
 					{formErrors?.last_name && (
 						<p className='text-red-600 font-weight-semibold underline'>
@@ -87,20 +96,40 @@ export default function Business({
 					)}
 				</fieldset>
 				<fieldset>
-					<label htmlFor='company_name'>Company Name</label>
+					<label htmlFor='birth_date'>Birth Date</label>
 					<input
-						type='text'
-						id='company_name'
-						name='company_name'
-						minLength={4}
-						maxLength={128}
-						value={formData.company_name}
+						type='date'
+						id='birth_date'
+						name='birth_date'
+						min={dateToISO(new Date(), -100)}
+						max={dateToISO(new Date(), -13)}
+						value={formData.birth_date}
 						required
 						onChange={handleFormChange}
+						placeholder='Birth Date'
 					/>
-					{formErrors?.company_name && (
+					{formErrors?.birth_date && (
 						<p className='text-red-600 font-weight-semibold underline'>
-							{capitalize(formErrors.company_name)}
+							{capitalize(formErrors.birth_date)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='city'>City</label>
+					<input
+						type='text'
+						id='city'
+						name='city'
+						minLength={4}
+						maxLength={32}
+						value={formData.city}
+						required
+						onChange={handleFormChange}
+						placeholder='City'
+					/>
+					{formErrors?.city && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.city)}
 						</p>
 					)}
 				</fieldset>
@@ -111,14 +140,141 @@ export default function Business({
 						id='address'
 						name='address'
 						minLength={4}
-						maxLength={128}
+						maxLength={64}
 						value={formData.address}
 						required
 						onChange={handleFormChange}
+						placeholder='Address'
 					/>
 					{formErrors?.address && (
 						<p className='text-red-600 font-weight-semibold underline'>
 							{capitalize(formErrors.address)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='country_calling_code'>Country Calling Code</label>
+					<input
+						type='number'
+						id='country_calling_code'
+						name='country_calling_code'
+						min={0}
+						max={999}
+						minLength={1}
+						maxLength={3}
+						value={formData.country_calling_code}
+						required
+						onChange={handleFormChange}
+						placeholder='Country Calling Code'
+					/>
+					{formErrors?.country_calling_code && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.country_calling_code)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='phone_number'>Phone Number</label>
+					<input
+						type='phone'
+						id='phone_number'
+						name='phone_number'
+						min={0o0000}
+						max={999999999999999}
+						minLength={5}
+						maxLength={15}
+						value={formData.phone_number}
+						required
+						onChange={handleFormChange}
+						placeholder='Phone Number'
+					/>
+					{formErrors?.phone_number && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.phone_number)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='currency'>Currency</label>
+					<select
+						id='currency'
+						name='currency'
+						value={formData.currency}
+						required
+						onChange={handleFormChange}
+						placeholder='Currency'
+					>
+						<option value=''>Choose Currency</option>
+						{supportedCurrencies
+							.sort((a, b) => a.localeCompare(b))
+							.map((cur, i) => {
+								return (
+									<option key={i} value={cur}>
+										{cur.toUpperCase()}
+									</option>
+								);
+							})}
+					</select>
+					{formErrors?.currency && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.currency)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='company_name'>Company Name</label>
+					<input
+						type='text'
+						id='company_name'
+						name='company_name'
+						minLength={4}
+						maxLength={64}
+						value={formData.company_name}
+						required
+						onChange={handleFormChange}
+						placeholder='Company Name'
+					/>
+					{formErrors?.company_name && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.company_name)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='company_city'>Company City</label>
+					<input
+						type='text'
+						id='company_city'
+						name='company_city'
+						minLength={4}
+						maxLength={32}
+						value={formData.company_city}
+						required
+						onChange={handleFormChange}
+						placeholder='Company City'
+					/>
+					{formErrors?.company_city && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.company_city)}
+						</p>
+					)}
+				</fieldset>
+				<fieldset>
+					<label htmlFor='company_address'>Company Address</label>
+					<input
+						type='text'
+						id='company_address'
+						name='company_address'
+						minLength={4}
+						maxLength={64}
+						value={formData.company_address}
+						required
+						onChange={handleFormChange}
+						placeholder='Company Address'
+					/>
+					{formErrors?.company_address && (
+						<p className='text-red-600 font-weight-semibold underline'>
+							{capitalize(formErrors.company_address)}
 						</p>
 					)}
 				</fieldset>
@@ -133,6 +289,7 @@ export default function Business({
 						value={formData.email}
 						required
 						onChange={handleFormChange}
+						placeholder='Email'
 					/>
 					{formErrors?.email && (
 						<p className='text-red-600 font-weight-semibold underline'>
@@ -151,6 +308,7 @@ export default function Business({
 						value={formData.password}
 						required
 						onChange={handleFormChange}
+						placeholder='Password'
 					/>
 					{formErrors?.password && (
 						<p className='text-red-600 font-weight-semibold underline'>
