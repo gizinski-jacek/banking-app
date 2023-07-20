@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { vipAccFormData } from '@/app/lib/defaults';
+import { vipAccFormDefaults } from '@/app/lib/defaults';
 import {
 	VipAccFormData,
 	VipAccFormErrors,
@@ -12,7 +12,7 @@ import capitalize from '../../lib/capitalize';
 import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
-	changeUserType: (type: 'regular' | 'vip' | 'business' | null) => void;
+	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
 	createAccount: (data: VipAccFormData) => void;
 	errors: VipAccFormErrors;
 }
@@ -22,7 +22,7 @@ export default function Business({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] = useState<VipAccFormData>(vipAccFormData);
+	const [formData, setFormData] = useState<VipAccFormData>(vipAccFormDefaults);
 	const [formErrors, setFormErrors] = useState<VipAccFormErrors | null>(
 		errors || null
 	);
@@ -31,6 +31,7 @@ export default function Business({
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) {
 		const { name, value } = e.target;
+		console.log(typeof value);
 		setFormData({
 			...formData,
 			[name]: value,
@@ -53,10 +54,17 @@ export default function Business({
 		}
 	}
 
+	function clearForm() {
+		setFormData(vipAccFormDefaults);
+	}
+
 	return (
 		<div>
-			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>Vip Account</h2>
+			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
+				<h2>Vip Account </h2>
+				<Button styleClass='my-3 mx-auto' cta={clearForm}>
+					Clear Form
+				</Button>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input
@@ -224,13 +232,13 @@ export default function Business({
 				<fieldset>
 					<label htmlFor='extra_funds'>Extra Funds</label>
 					<input
-						type='extra_funds'
+						type='number'
 						id='extra_funds'
 						name='extra_funds'
 						min={0}
 						max={1000000}
 						step={0.01}
-						value={formData.extra_funds}
+						value={(Math.round(formData.extra_funds * 100) / 100).toFixed(2)}
 						required
 						onChange={handleFormChange}
 						placeholder='Extra Funds'
