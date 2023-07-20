@@ -14,7 +14,7 @@ export default async function yupValidation<T = Record<string, any>>(
 	}
 }
 
-export const basicAccFormValidationSchema = Yup.object().shape({
+export const basicUserFormValidationSchema = Yup.object().shape({
 	first_name: Yup.string()
 		.required('First name field is required.')
 		.min(4, 'First name min 4 characters.')
@@ -26,7 +26,9 @@ export const basicAccFormValidationSchema = Yup.object().shape({
 	birth_date: Yup.string()
 		.required('Birth date field is required.')
 		.min(8, 'Birth date min 8 characters.')
-		.max(10, 'Birth date max 10 characters.'),
+		.max(10, 'Birth date max 10 characters.')
+		// TODO: Properly check date by converting string and checking against new date
+		.test('date-check', 'Invalid date.', () => new Date()),
 	city: Yup.string()
 		.required('City field is required.')
 		.min(4, 'City min 4 characters.')
@@ -76,15 +78,15 @@ export const basicAccFormValidationSchema = Yup.object().shape({
 		.max(128, 'Password max 128 characters.'),
 });
 
-export const vipAccFormValidationSchema = basicAccFormValidationSchema.shape({
+export const vipUserFormValidationSchema = basicUserFormValidationSchema.shape({
 	extra_funds: Yup.number()
 		.required('Extra Funds field is required.')
 		.min(0, 'Extra Funds min value 0.')
 		.max(1000000, 'Extra Funds max value 1000000.'),
 });
 
-export const businessAccFormValidationSchema =
-	basicAccFormValidationSchema.shape({
+export const businessUserFormValidationSchema =
+	basicUserFormValidationSchema.shape({
 		company_name: Yup.string()
 			.required('Password field is required.')
 			.min(4, 'Password min 4 characters.')
