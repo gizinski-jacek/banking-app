@@ -1,11 +1,11 @@
 import {
-	BusinessAccFormData,
+	BusinessUserFormData,
 	LoginData,
-	BasicAccFormData,
-	VipAccFormData,
+	BasicUserFormData,
+	VipUserFormData,
 } from '../types/types';
 
-export const basicAccFormDefaults: BasicAccFormData = {
+export const basicUserFormDefaults: BasicUserFormData = {
 	first_name: '',
 	last_name: '',
 	birth_date: '',
@@ -18,13 +18,13 @@ export const basicAccFormDefaults: BasicAccFormData = {
 	password: '',
 };
 
-export const vipAccFormDefaults: VipAccFormData = {
-	...basicAccFormDefaults,
+export const vipUserFormDefaults: VipUserFormData = {
+	...basicUserFormDefaults,
 	extra_funds: 0,
 };
 
-export const businessAccFormDefaults: BusinessAccFormData = {
-	...basicAccFormDefaults,
+export const businessUserFormDefaults: BusinessUserFormData = {
+	...basicUserFormDefaults,
 	company_name: '',
 	company_city: '',
 	company_address: '',
