@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { basicAccFormData } from '@/app/lib/defaults';
+import { basicAccFormDefaults } from '@/app/lib/defaults';
 import {
 	BasicAccFormData,
 	BasicAccFormErrors,
@@ -22,7 +22,8 @@ export default function Basic({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] = useState<BasicAccFormData>(basicAccFormData);
+	const [formData, setFormData] =
+		useState<BasicAccFormData>(basicAccFormDefaults);
 	const [formErrors, setFormErrors] = useState<BasicAccFormErrors | null>(
 		errors || null
 	);
@@ -52,10 +53,17 @@ export default function Basic({
 		}
 	}
 
+	function clearForm() {
+		setFormData(basicAccFormDefaults);
+	}
+
 	return (
 		<div>
-			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>Basic Account</h2>
+			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
+				<h2>Basic Account</h2>
+				<Button styleClass='my-3 mx-auto' cta={clearForm}>
+					Clear Form
+				</Button>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input

@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import { businessAccFormData } from '@/app/lib/defaults';
+import { businessAccFormDefaults } from '@/app/lib/defaults';
 import {
 	BusinessAccFormData,
 	BusinessAccFormErrors,
@@ -12,7 +12,7 @@ import capitalize from '../../lib/capitalize';
 import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
-	changeUserType: (type: 'regular' | 'vip' | 'business' | null) => void;
+	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
 	createAccount: (data: BusinessAccFormData) => void;
 	errors: BusinessAccFormErrors;
 }
@@ -22,8 +22,9 @@ export default function Business({
 	createAccount,
 	errors,
 }: Props) {
-	const [formData, setFormData] =
-		useState<BusinessAccFormData>(businessAccFormData);
+	const [formData, setFormData] = useState<BusinessAccFormData>(
+		businessAccFormDefaults
+	);
 	const [formErrors, setFormErrors] = useState<BusinessAccFormErrors | null>(
 		errors || null
 	);
@@ -53,10 +54,17 @@ export default function Business({
 		}
 	}
 
+	function clearForm() {
+		setFormData(businessAccFormDefaults);
+	}
+
 	return (
 		<div>
-			<form className='grid grid-cols-2 gap-4 gap-x-8'>
-				<h2 className='col-span-2'>Business Account</h2>
+			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
+				<h2>Business Account</h2>
+				<Button styleClass='my-3 mx-auto' cta={clearForm}>
+					Clear Form
+				</Button>
 				<fieldset>
 					<label htmlFor='first_name'>First Name</label>
 					<input
