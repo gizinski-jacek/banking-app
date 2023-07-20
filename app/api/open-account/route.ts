@@ -1,7 +1,7 @@
 import yupValidation, {
-	businessAccFormValidationSchema,
-	basicAccFormValidationSchema,
-	vipAccFormValidationSchema,
+	businessUserFormValidationSchema,
+	basicUserFormValidationSchema,
+	vipUserFormValidationSchema,
 } from '@/app/lib/yup';
 import { customAlphabet } from 'nanoid';
 import bcryptjs from 'bcryptjs';
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
 
 		if (accType === 'basic') {
 			const { errors } = await yupValidation(
-				basicAccFormValidationSchema,
+				basicUserFormValidationSchema,
 				body
 			);
 			if (errors) {
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 		}
 
 		if (accType === 'vip') {
-			const { errors } = await yupValidation(vipAccFormValidationSchema, body);
+			const { errors } = await yupValidation(vipUserFormValidationSchema, body);
 			if (errors) {
 				return new Response(errors, { status: 422 });
 			}
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
 
 		if (accType === 'business') {
 			const { errors } = await yupValidation(
-				businessAccFormValidationSchema,
+				businessUserFormValidationSchema,
 				body
 			);
 			if (errors) {
