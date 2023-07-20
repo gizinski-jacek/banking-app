@@ -1,19 +1,14 @@
 import mongoose from 'mongoose';
 import {
-	AccountModel,
+	AccountSchema,
 	accountTypes,
 	supportedCurrencies,
 } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const AccountSchema = new Schema<AccountModel>(
+const AccountSchema = new Schema<AccountSchema>(
 	{
-		owner: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
-		},
 		accountType: {
 			type: String,
 			enum: accountTypes,
@@ -23,7 +18,7 @@ const AccountSchema = new Schema<AccountModel>(
 		companyName: {
 			type: String,
 			trim: true,
-			minlength: 8,
+			minlength: 4,
 			maxlength: 64,
 			required: function () {
 				return this.accountType === 'business';
@@ -32,8 +27,8 @@ const AccountSchema = new Schema<AccountModel>(
 		companyCity: {
 			type: String,
 			trim: true,
-			minlength: 8,
-			maxlength: 64,
+			minlength: 4,
+			maxlength: 32,
 			required: function () {
 				return this.accountType === 'business';
 			},
@@ -41,8 +36,8 @@ const AccountSchema = new Schema<AccountModel>(
 		companyAddress: {
 			type: String,
 			trim: true,
-			minlength: 8,
-			maxlength: 128,
+			minlength: 4,
+			maxlength: 64,
 			required: function () {
 				return this.accountType === 'business';
 			},
@@ -50,15 +45,15 @@ const AccountSchema = new Schema<AccountModel>(
 		currency: {
 			type: String,
 			trim: true,
-			// Refactor to support decimals as number type by default !!!
+			// TODO: Refactor to support decimals as number type by default !!!
 			enum: supportedCurrencies,
-			default: '0.00',
+			required: true,
 		},
 		balance: {
-			type: String,
+			type: Number,
 			trim: true,
-			// Refactor to support decimals as number type by default !!!
-			default: '100000.00',
+			// TODO: Refactor to support decimals as number type by default !!!
+			default: 0.0,
 		},
 	},
 	{ timestamps: true }
