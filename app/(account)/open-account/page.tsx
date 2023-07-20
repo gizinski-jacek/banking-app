@@ -3,40 +3,41 @@
 import Button from '@/app/components/Button';
 import {
 	BusinessAccFormData,
-	RegularAccFormData,
+	BasicAccFormData,
 	VipAccFormData,
+	BasicAccFormErrors,
 } from '@/app/types/types';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { useState } from 'react';
 import Business from './business';
-import Regular from './regular';
+import Basic from './basic';
 import Vip from './vip';
 import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/Modal';
 import Spinner from '@/app/components/Spinner';
 
 export default function OpenAccount() {
-	const [accType, setAccType] = useState<'regular' | 'vip' | 'business' | null>(
+	const [accType, setAccType] = useState<'basic' | 'vip' | 'business' | null>(
 		null
 	);
-	const [formErrors, setFormErrors] = useState<any | null>(null);
+	const [formErrors, setFormErrors] = useState<string[] | null>(null);
 	const [fetching, setFetching] = useState(false);
 	const [userId, setUserId] = useState<null | string>(null);
 	const router = useRouter();
 
-	function changeUserType(type: 'regular' | 'vip' | 'business' | null) {
+	function changeUserType(type: 'basic' | 'vip' | 'business' | null) {
 		setAccType(type);
 	}
 
 	async function createAccount(
-		data: RegularAccFormData | VipAccFormData | BusinessAccFormData
+		data: BasicAccFormData | VipAccFormData | BusinessAccFormData
 	) {
 		try {
-			const formErrors = {} as RegularAccFormData;
+			const formErrors = {} as BasicAccFormErrors;
 			for (const [key, value] of Object.entries(data)) {
 				if (!value) {
-					formErrors[key as keyof RegularAccFormData] = `Invalid ${key}`;
+					formErrors[key as keyof BasicAccFormErrors] = `Invalid ${key}`;
 				}
 			}
 			if (Object.keys(formErrors).length !== 0) throw new Error('formErrors');
@@ -49,7 +50,11 @@ export default function OpenAccount() {
 			setFetching(false);
 		} catch (error: any) {
 			console.log(error);
-			setFormErrors(error);
+			setFormErrors(
+				error.response.data
+					? error.response.data.split(',')
+					: 'Unknown server error.'
+			);
 			setFetching(false);
 		}
 	}
@@ -69,7 +74,7 @@ export default function OpenAccount() {
 	return (
 		<div className='flex flex-col items-center gap-10'>
 			{fetching && <Spinner />}
-			<Modal show={userId || formErrors} dismiss={dismissModal}>
+			<Modal show={!!userId || !!formErrors} dismiss={dismissModal}>
 				{userId ? (
 					<>
 						<p>Your login Id:</p>
@@ -77,17 +82,21 @@ export default function OpenAccount() {
 						<p>Make sure you remember it.</p>
 					</>
 				) : formErrors ? (
-					<>render errors !!!</>
+					<>
+						{formErrors.map((str, i) => {
+							return <p key={i}>{str}</p>;
+						})}
+					</>
 				) : null}
 			</Modal>
-			{/* Fix dropdown anim not working (max-h-screen issue) !!! */}
+			{/* Fix dropdown anim not working (max-h-full issue) !!! */}
 			<div className='flex flex-col items-center text-center p-5'>
 				<div
 					className={`overflow-hidden ease-in-out duration-300 ${
-						accType === 'regular' ? 'max-h-screen delay-500' : 'max-h-0'
+						accType === 'basic' ? 'max-h-full delay-500' : 'max-h-0'
 					}`}
 				>
-					<Regular
+					<Basic
 						changeUserType={changeUserType}
 						createAccount={createAccount}
 						errors={formErrors}
@@ -95,7 +104,7 @@ export default function OpenAccount() {
 				</div>
 				<div
 					className={`overflow-hidden ease-in-out duration-300 ${
-						accType === 'vip' ? 'max-h-screen delay-500' : 'max-h-0'
+						accType === 'vip' ? 'max-h-full delay-500' : 'max-h-0'
 					}`}
 				>
 					<Vip
@@ -106,7 +115,7 @@ export default function OpenAccount() {
 				</div>
 				<div
 					className={`overflow-hidden ease-in-out duration-300 ${
-						accType === 'business' ? 'max-h-screen delay-500' : 'max-h-0'
+						accType === 'business' ? 'max-h-full delay-500' : 'max-h-0'
 					}`}
 				>
 					<Business
@@ -117,14 +126,14 @@ export default function OpenAccount() {
 				</div>
 				<div
 					className={`grid grid-cols-3 gap-5 md:flex-row overflow-hidden ease-in-out duration-300 ${
-						accType === null ? 'max-h-screen delay-500' : 'max-h-0'
+						accType === null ? 'max-h-full delay-500' : 'max-h-0'
 					}`}
 				>
 					<div className='flex flex-col gap-2'>
-						<h2>Regular Account</h2>
+						<h2>Basic Account</h2>
 						<p>Simple account for non-demanding users.</p>
-						<Button styleClass='mt-auto' cta={() => changeUserType('regular')}>
-							Open Regular Account
+						<Button styleClass='mt-auto' cta={() => changeUserType('basic')}>
+							Open Basic Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
