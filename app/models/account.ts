@@ -45,14 +45,12 @@ const AccountSchema = new Schema<AccountSchema>(
 		currency: {
 			type: String,
 			trim: true,
-			// TODO: Refactor to support decimals as number type by default !!!
 			enum: supportedCurrencies,
 			required: true,
 		},
 		balance: {
 			type: Number,
 			trim: true,
-			// TODO: Refactor to support decimals as number type by default !!!
 			default: 0.0,
 		},
 	},
