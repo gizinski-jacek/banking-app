@@ -27,8 +27,17 @@ export const basicUserFormValidationSchema = Yup.object().shape({
 		.required('Birth date field is required.')
 		.min(8, 'Birth date min 8 characters.')
 		.max(10, 'Birth date max 10 characters.')
-		// TODO: Properly check date by converting string and checking against new date
-		.test('date-check', 'Invalid date.', () => new Date()),
+		.test(
+			'min-date',
+			'Too young for an account.',
+			(value) => new Date(value).getTime() > new Date().getTime() - 410240038000
+		)
+		.test(
+			'max-date',
+			'Too old for an account.',
+			(value) =>
+				new Date(value).getTime() < new Date().getTime() - 3155692600000
+		),
 	city: Yup.string()
 		.required('City field is required.')
 		.min(4, 'City min 4 characters.')
