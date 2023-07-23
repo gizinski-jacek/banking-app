@@ -32,7 +32,7 @@ export default function Login() {
 			if (!data.userId) {
 				setUserIdError('Provide valid account');
 			}
-			const res = await signIn('credentials-account', {
+			const res = await signIn('credentials-id', {
 				userId: data.userId,
 				redirect: false,
 			});
