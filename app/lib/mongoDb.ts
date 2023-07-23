@@ -23,23 +23,32 @@ if (!cached) {
 }
 
 export default async function connectMongo() {
-	const opts: MongooseOptions = {
-		bufferCommands: true,
-	};
+	try {
+		const opts: MongooseOptions = {
+			bufferCommands: true,
+		};
 
-	if (!cached.client) {
-		const client = await mongoose.connect(
-			MONGODb_URI + 'mainCollection?retryWrites=true&w=majority',
-			opts
-		);
+		if (!cached.client) {
+			const client = await mongoose.connect(
+				MONGODb_URI + 'mainCollection?retryWrites=true&w=majority',
+				opts
+			);
 
-		// if (!client.models.Account) {
-		// 	client.model('Account', require('../models/account')); !!!
-		// }
+			// TODO:
+			// if (!client.models.User) {
+			// 	client.model('User', require('../models/user')); !!!
+			// }
+			// if (!client.models.Account) {
+			// 	client.model('Account', require('../models/account')); !!!
+			// }
 
-		cached.client = client;
-		return cached.client.connections[0];
+			cached.client = client;
+			return cached.client.connections[0];
+		}
+
+		return cached.client;
+	} catch (error) {
+		console.log(error);
+		return new Error('Error connecting to database.');
 	}
-
-	return cached.client;
 }
