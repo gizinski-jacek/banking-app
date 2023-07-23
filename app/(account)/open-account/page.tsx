@@ -2,10 +2,10 @@
 
 import Button from '@/app/components/Button';
 import {
-	BusinessAccFormData,
-	BasicAccFormData,
-	VipAccFormData,
-	BasicAccFormErrors,
+	BusinessUserFormData,
+	BasicUserFormData,
+	VipUserFormData,
+	BasicUserFormErrors,
 } from '@/app/types/types';
 import axios, { AxiosError } from 'axios';
 
@@ -31,13 +31,13 @@ export default function OpenAccount() {
 	}
 
 	async function createAccount(
-		data: BasicAccFormData | VipAccFormData | BusinessAccFormData
+		data: BasicUserFormData | VipUserFormData | BusinessUserFormData
 	) {
 		try {
-			const formErrors = {} as BasicAccFormErrors;
+			const formErrors = {} as BasicUserFormErrors;
 			for (const [key, value] of Object.entries(data)) {
 				if (!value) {
-					formErrors[key as keyof BasicAccFormErrors] = `Invalid ${key}`;
+					formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}`;
 				}
 			}
 			if (Object.keys(formErrors).length !== 0) throw new Error('formErrors');
