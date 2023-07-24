@@ -49,6 +49,6 @@ export default async function connectMongo() {
 		return cached.client;
 	} catch (error) {
 		console.log(error);
-		return new Error('Error connecting to database.');
+		throw new Error('Error connecting to database.');
 	}
 }
