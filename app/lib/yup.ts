@@ -30,13 +30,13 @@ export const basicUserFormValidationSchema = Yup.object().shape({
 		.test(
 			'min-date',
 			'Too young for an account.',
-			(value) => new Date(value).getTime() > new Date().getTime() - 410240038000
+			(value) => new Date(value).getTime() < new Date().getTime() - 410240038000
 		)
 		.test(
 			'max-date',
 			'Too old for an account.',
 			(value) =>
-				new Date(value).getTime() < new Date().getTime() - 3155692600000
+				new Date(value).getTime() > new Date().getTime() - 3155692600000
 		),
 	city: Yup.string()
 		.required('City field is required.')
@@ -112,9 +112,8 @@ export const businessUserFormValidationSchema =
 
 export const userIdSchema: Yup.Schema<LoginData> = Yup.object().shape({
 	userId: Yup.string()
-		.required('Account Id field is required.')
-		.min(16, 'Account Id min 16 characters.')
-		.max(64, 'Account Id max 64 characters.'),
+		.required('User Id field is required.')
+		.length(16, 'User Id is 16 characters long.'),
 });
 
 export const accountPasswordSchema = userIdSchema.concat(
