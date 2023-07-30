@@ -27,22 +27,22 @@ export default function Login() {
 		setFormData({ ...formData, [name]: value });
 	}
 
-	async function verifyAccount(data: LoginData) {
+	async function verifyUserId(data: LoginData) {
 		try {
 			if (!data.userId) {
-				setUserIdError('Provide valid account');
+				setUserIdError('Provide valid user Id.');
 			}
 			const res = await signIn('credentials-id', {
 				userId: data.userId,
 				redirect: false,
 			});
 			if (!res) {
-				setUserIdError('Sign In error');
+				setUserIdError('Sign In error.');
 				return;
 			}
 			// Temporary workaround, find better way to not set
 			// session but receive positive response !!!
-			if (res.error === 'acc-valid') {
+			if (res.error === 'user-valid') {
 				setUserIdValid(true);
 				return;
 			}
@@ -52,21 +52,21 @@ export default function Login() {
 			setUserIdValid(true);
 		} catch (error: any) {
 			console.log(error);
-			setUserIdError('Incorrect login Id');
+			setUserIdError('Incorrect Id.');
 		}
 	}
 
 	async function verifyPassword(data: LoginData) {
 		try {
 			if (!data.password) {
-				setPasswordError('Provide valid password');
+				setPasswordError('Provide valid password.');
 			}
 			const res = await signIn('credentials-password', {
 				...data,
 				redirect: false,
 			});
 			if (!res) {
-				setUserIdError('Sign In error');
+				setUserIdError('Sign In error.');
 				return;
 			}
 			if (res.error) {
@@ -78,7 +78,7 @@ export default function Login() {
 		} catch (error: any) {
 			console.log(error);
 			setPasswordValid(false);
-			setPasswordError('Incorrect password');
+			setPasswordError('Incorrect password.');
 		}
 	}
 
@@ -89,18 +89,18 @@ export default function Login() {
 			{!userIdValid ? (
 				<form className='flex flex-col items-center gap-5 mx-auto text-center'>
 					<fieldset>
-						<label htmlFor='userId'>Account ID</label>
+						<label htmlFor='userId'>User Id</label>
 						<input
 							className='text-center'
 							type='text'
 							id='userId'
 							name='userId'
 							value={formData.userId}
-							minLength={8}
-							maxLength={64}
+							minLength={16}
+							maxLength={16}
 							required
 							onChange={handleFormChange}
-							placeholder='Login ID'
+							placeholder='User Id'
 						/>
 						{userIdError && (
 							<p className='text-red-600 font-weight-semibold underline'>
@@ -110,7 +110,7 @@ export default function Login() {
 					</fieldset>
 					<Button
 						styleClass='my-3 col-span-2 mx-auto'
-						cta={() => verifyAccount(formData)}
+						cta={() => verifyUserId(formData)}
 					>
 						Submit
 					</Button>
@@ -144,6 +144,9 @@ export default function Login() {
 					</Button>
 				</form>
 			)}
+			<Button href='/open-account' buttonLike={true}>
+				{`<- Open An Account`}
+			</Button>
 			<Button href='/' buttonLike={true}>
 				{`<- Go Back To Home Page`}
 			</Button>
