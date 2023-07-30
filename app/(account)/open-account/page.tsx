@@ -7,7 +7,7 @@ import {
 	VipUserFormData,
 	BasicUserFormErrors,
 } from '@/app/types/types';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { useState } from 'react';
 import Business from './business';
@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import Modal from '@/app/components/Modal';
 import Spinner from '@/app/components/Spinner';
 
-export default function OpenAccount() {
+export default function NewUser() {
 	const [accType, setAccType] = useState<'basic' | 'vip' | 'business' | null>(
 		null
 	);
@@ -30,14 +30,14 @@ export default function OpenAccount() {
 		setAccType(type);
 	}
 
-	async function createAccount(
+	async function createNewUser(
 		data: BasicUserFormData | VipUserFormData | BusinessUserFormData
 	) {
 		try {
 			const formErrors = {} as BasicUserFormErrors;
 			for (const [key, value] of Object.entries(data)) {
 				if (!value) {
-					formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}`;
+					formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}.`;
 				}
 			}
 			if (Object.keys(formErrors).length !== 0) throw new Error('formErrors');
@@ -74,10 +74,14 @@ export default function OpenAccount() {
 	return (
 		<div className='flex flex-col items-center gap-10'>
 			{fetching && <Spinner />}
-			<Modal show={!!userId || !!formErrors} dismiss={dismissModal}>
+			<Modal
+				show={!!userId || !!formErrors}
+				dismiss={dismissModal}
+				dismissBtnText='Login'
+			>
 				{userId ? (
 					<>
-						<p>Your login Id:</p>
+						<p>Your user Id:</p>
 						<h3>{userId}</h3>
 						<p>Make sure you remember it.</p>
 					</>
@@ -98,7 +102,7 @@ export default function OpenAccount() {
 				>
 					<Basic
 						changeUserType={changeUserType}
-						createAccount={createAccount}
+						createUser={createNewUser}
 						errors={formErrors}
 					/>
 				</div>
@@ -109,7 +113,7 @@ export default function OpenAccount() {
 				>
 					<Vip
 						changeUserType={changeUserType}
-						createAccount={createAccount}
+						createUser={createNewUser}
 						errors={formErrors}
 					/>
 				</div>
@@ -120,7 +124,7 @@ export default function OpenAccount() {
 				>
 					<Business
 						changeUserType={changeUserType}
-						createAccount={createAccount}
+						createUser={createNewUser}
 						errors={formErrors}
 					/>
 				</div>
@@ -130,28 +134,31 @@ export default function OpenAccount() {
 					}`}
 				>
 					<div className='flex flex-col gap-2'>
-						<h2>Basic Account</h2>
+						<h2>Basic User Account</h2>
 						<p>Simple account for non-demanding users.</p>
 						<Button styleClass='mt-auto' cta={() => changeUserType('basic')}>
-							Open Basic Account
+							Open Basic User Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
-						<h2>Vip Account</h2>
+						<h2>Vip User Account</h2>
 						<p>Special account with extra bells and whistles.</p>
 						<Button styleClass='mt-auto' cta={() => changeUserType('vip')}>
-							Open Vip Account
+							Open Vip User Account
 						</Button>
 					</div>
 					<div className='flex flex-col gap-2'>
-						<h2>Business Account</h2>
+						<h2>Business User Account</h2>
 						<p>Best for brave entrepreneurs.</p>
 						<Button styleClass='mt-auto' cta={() => changeUserType('business')}>
-							Open Business Account
+							Open Business User Account
 						</Button>
 					</div>
 				</div>
 			</div>
+			<Button href='/login' buttonLike={true}>
+				{`<- Go To Login Page`}
+			</Button>{' '}
 			<Button href='/' buttonLike={true}>
 				{`<- Go Back To Home Page`}
 			</Button>
