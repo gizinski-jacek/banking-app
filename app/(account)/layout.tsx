@@ -1,7 +1,7 @@
-export default function OpenAccountLayout({
+export default function AccountLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	return <>{children}</>;
+	return <div>{children}</div>;
 }
