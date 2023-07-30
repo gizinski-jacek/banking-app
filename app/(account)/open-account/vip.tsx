@@ -13,13 +13,13 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: VipUserFormData) => void;
+	createUser: (data: VipUserFormData) => void;
 	errors: VipUserFormErrors;
 }
 
 export default function Business({
 	changeUserType,
-	createAccount,
+	createUser,
 	errors,
 }: Props) {
 	const [formData, setFormData] =
@@ -32,7 +32,6 @@ export default function Business({
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) {
 		const { name, value } = e.target;
-		console.log(typeof value);
 		setFormData({
 			...formData,
 			[name]: value,
@@ -43,14 +42,14 @@ export default function Business({
 		const formErrors = {} as VipUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof VipUserFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof VipUserFormErrors] = `Invalid ${key}.`;
 			}
 		}
 		// TODO: Verify funds field to make sure its only 2 decimal places !!!
 		if (Object.keys(formErrors).length !== 0) {
 			setFormErrors(formErrors);
 		} else {
-			createAccount(formData);
+			createUser(formData);
 			setFormErrors(null);
 		}
 	}
@@ -62,7 +61,7 @@ export default function Business({
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
-				<h2>Vip Account </h2>
+				<h2>Vip User Account</h2>
 				<Button styleClass='my-3 mx-auto' cta={clearForm}>
 					Clear Form
 				</Button>

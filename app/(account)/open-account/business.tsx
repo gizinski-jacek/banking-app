@@ -13,13 +13,13 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: BusinessUserFormData) => void;
+	createUser: (data: BusinessUserFormData) => void;
 	errors: BusinessUserFormErrors;
 }
 
 export default function Business({
 	changeUserType,
-	createAccount,
+	createUser,
 	errors,
 }: Props) {
 	const [formData, setFormData] = useState<BusinessUserFormData>(
@@ -43,13 +43,13 @@ export default function Business({
 		const formErrors = {} as BusinessUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof BusinessUserFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof BusinessUserFormErrors] = `Invalid ${key}.`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
 			setFormErrors(formErrors);
 		} else {
-			createAccount(formData);
+			createUser(formData);
 			setFormErrors(null);
 		}
 	}
@@ -61,7 +61,7 @@ export default function Business({
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
-				<h2>Business Account</h2>
+				<h2>Business User Account</h2>
 				<Button styleClass='my-3 mx-auto' cta={clearForm}>
 					Clear Form
 				</Button>

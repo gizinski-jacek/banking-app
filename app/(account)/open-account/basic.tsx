@@ -13,15 +13,11 @@ import dateToISO from '@/app/lib/dateToISO';
 
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
-	createAccount: (data: BasicUserFormData) => void;
+	createUser: (data: BasicUserFormData) => void;
 	errors: BasicUserFormErrors;
 }
 
-export default function Basic({
-	changeUserType,
-	createAccount,
-	errors,
-}: Props) {
+export default function Basic({ changeUserType, createUser, errors }: Props) {
 	const [formData, setFormData] = useState<BasicUserFormData>(
 		basicUserFormDefaults
 	);
@@ -43,13 +39,13 @@ export default function Basic({
 		const formErrors = {} as BasicUserFormErrors;
 		for (const [key, value] of Object.entries(data)) {
 			if (!value) {
-				formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}`;
+				formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}.`;
 			}
 		}
 		if (Object.keys(formErrors).length !== 0) {
 			setFormErrors(formErrors);
 		} else {
-			createAccount(formData);
+			createUser(formData);
 			setFormErrors(null);
 		}
 	}
@@ -61,7 +57,7 @@ export default function Basic({
 	return (
 		<div>
 			<form className='grid grid-cols-2 gap-4 gap-x-8 items-center'>
-				<h2>Basic Account</h2>
+				<h2>Basic User Account</h2>
 				<Button styleClass='my-3 mx-auto' cta={clearForm}>
 					Clear Form
 				</Button>
