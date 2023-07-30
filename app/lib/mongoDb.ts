@@ -1,11 +1,11 @@
 import mongoose, { MongooseOptions } from 'mongoose';
 
-const MONGODb_URI =
+const MONGODB_URI =
 	process.env.NODE_ENV === 'production'
 		? process.env.MONGODB_URI
 		: process.env.MONGODB_URI_DEV;
 
-if (!MONGODb_URI) {
+if (!MONGODB_URI) {
 	throw new Error(
 		'Please define the MONGODb_URI / MONGODb_URI_DEV environment variable inside .env.local'
 	);
@@ -30,7 +30,7 @@ export default async function connectMongo() {
 
 		if (!cached.client) {
 			const client = await mongoose.connect(
-				MONGODb_URI + 'mainCollection?retryWrites=true&w=majority',
+				MONGODB_URI + 'mainCollection?retryWrites=true&w=majority',
 				opts
 			);
 
