@@ -10,6 +10,7 @@ interface Props {
 	styleClass?: string;
 	styleObj?: React.CSSProperties;
 	dismissBtn?: boolean;
+	dismissBtnText?: string;
 }
 
 export default function Modal({
@@ -19,6 +20,7 @@ export default function Modal({
 	styleClass,
 	styleObj,
 	dismissBtn = true,
+	dismissBtnText = 'Close',
 }: Props) {
 	return (
 		<div
@@ -37,7 +39,7 @@ export default function Modal({
 				{children}
 				{dismissBtn && (
 					<Button cta={dismiss} styleClass='mt-6'>
-						Close
+						{dismissBtnText}
 					</Button>
 				)}
 			</div>
