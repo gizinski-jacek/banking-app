@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
 		const body = await request.json();
 		await connectDb();
-		const nanoid = customAlphabet('1234567890', 12);
+		const nanoid = customAlphabet('1234567890', 16);
 
 		if (accType === 'basic') {
 			const { errors } = await yupValidation(
@@ -124,6 +124,6 @@ export async function POST(request: Request) {
 		return new Response(null, { status: 200 });
 	} catch (error: any) {
 		console.log(error);
-		return error;
+		throw new Error('Unknown server error.');
 	}
 }
