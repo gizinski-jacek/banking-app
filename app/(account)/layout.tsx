@@ -1,7 +1,9 @@
+import Auth from '../components/Auth';
+
 export default function AccountLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	return <div>{children}</div>;
+	return <Auth>{children}</Auth>;
 }
