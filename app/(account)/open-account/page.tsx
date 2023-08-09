@@ -6,9 +6,10 @@ import {
 	BasicUserFormData,
 	VipUserFormData,
 	BasicUserFormErrors,
+	VipUserFormErrors,
+	BusinessUserFormErrors,
 } from '@/app/types/types';
-import axios from 'axios';
-
+import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
 import Business from './business';
 import Basic from './basic';
@@ -34,13 +35,12 @@ export default function NewUser() {
 		data: BasicUserFormData | VipUserFormData | BusinessUserFormData
 	) {
 		try {
-			const formErrors = {} as BasicUserFormErrors;
-			for (const [key, value] of Object.entries(data)) {
+			for (const value of Object.values(data)) {
 				if (!value) {
-					formErrors[key as keyof BasicUserFormErrors] = `Invalid ${key}.`;
+					setFormErrors(['All fields are required.']);
+					return;
 				}
 			}
-			if (Object.keys(formErrors).length !== 0) throw new Error('formErrors');
 			setFetching(true);
 			const res = await axios.post(
 				`/api/open-account?accType=${accType}`,
@@ -50,11 +50,13 @@ export default function NewUser() {
 			setFetching(false);
 		} catch (error: any) {
 			console.log(error);
-			setFormErrors(
-				error.response.data
-					? error.response.data.split(',')
-					: 'Unknown server error.'
-			);
+			if (error instanceof AxiosError) {
+				const data = error?.response?.data;
+				if (!data) setFormErrors(['Unknown server error.']);
+				Array.isArray(data) ? setFormErrors(data) : setFormErrors([data]);
+			} else {
+				setFormErrors([(error as Error).message || 'Unknown server error.']);
+			}
 			setFetching(false);
 		}
 	}
@@ -103,7 +105,7 @@ export default function NewUser() {
 					<Basic
 						changeUserType={changeUserType}
 						createUser={createNewUser}
-						errors={formErrors}
+						errors={formErrors as BasicUserFormErrors | null}
 					/>
 				</div>
 				<div
@@ -114,7 +116,7 @@ export default function NewUser() {
 					<Vip
 						changeUserType={changeUserType}
 						createUser={createNewUser}
-						errors={formErrors}
+						errors={formErrors as VipUserFormErrors | null}
 					/>
 				</div>
 				<div
@@ -125,7 +127,7 @@ export default function NewUser() {
 					<Business
 						changeUserType={changeUserType}
 						createUser={createNewUser}
-						errors={formErrors}
+						errors={formErrors as BusinessUserFormErrors | null}
 					/>
 				</div>
 				<div
