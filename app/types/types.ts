@@ -44,7 +44,7 @@ export interface LoginData {
 	password?: string;
 }
 
-export interface UserSchema {
+export interface UserSchemaType {
 	userId: string;
 	firstName: string;
 	lastName: string;
@@ -58,20 +58,15 @@ export interface UserSchema {
 	accounts: Types.ObjectId[];
 }
 
-export type UserModel = UserSchema &
+export type UserModel = UserSchemaType &
 	mongoose.Document & {
 		createdAt: number;
 		updatedAt: number;
 	};
 
-export interface AccountSchema {
-	accountType:
-		| 'basic'
-		| 'vip'
-		| 'business'
-		| 'foreignCurrency'
-		| 'savings'
-		| 'junior';
+export interface AccountSchemaType {
+	primary?: boolean;
+	accountType: AccountTypes;
 	companyName?: string;
 	companyCity?: string;
 	companyAddress?: string;
@@ -79,20 +74,30 @@ export interface AccountSchema {
 	balance?: number;
 }
 
-export type AccountModel = AccountSchema &
+export type AccountModel = Omit<AccountSchemaType, 'balance'> &
 	mongoose.Document & {
 		createdAt: number;
 		updatedAt: number;
+		balance: number;
 	};
 
 export interface SessionUser {
+	_id: mongoose.Schema.Types.ObjectId;
 	userId: string;
 	firstName: string;
 	lastName: string;
-	accounts: Types.ObjectId[];
+	accounts: AccountModel[];
 }
 
-export const accountTypes: string[] = [
+export type AccountTypes =
+	| 'basic'
+	| 'vip'
+	| 'business'
+	| 'foreignCurrency'
+	| 'savings'
+	| 'junior';
+
+export const accountTypes: AccountTypes[] = [
 	'basic',
 	'vip',
 	'business',
@@ -101,10 +106,4 @@ export const accountTypes: string[] = [
 	'junior',
 ];
 
-export const supportedCurrencies: string[] = [
-	'EUR',
-	'USD',
-	'PLN',
-	'CHF',
-	'GBP',
-];
+export const currenciesCodes: string[] = ['EUR', 'USD', 'PLN', 'CHF', 'GBP'];
