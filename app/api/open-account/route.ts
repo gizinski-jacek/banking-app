@@ -9,17 +9,17 @@ import User from '@/app/models/user';
 import connectDb from '@/app/lib/mongoDb';
 import {
 	AccountModel,
-	AccountSchema,
+	AccountSchemaType,
 	UserModel,
-	UserSchema,
+	UserSchemaType,
+	accountTypes,
 } from '@/app/types/types';
 import Account from '@/app/models/account';
 
 export async function POST(request: Request) {
 	try {
 		const accType = new URL(request.url).searchParams.get('accType');
-
-		if (!accType) {
+		if (!accountTypes.find((s) => s === accType)) {
 			return new Response(null, { status: 400 });
 		}
 
@@ -36,12 +36,13 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount = new Account<AccountSchema>({
+			const newAccount = new Account<AccountSchemaType>({
+				primary: true,
 				accountType: 'basic',
 				currency: body.currency,
 			});
 			const account: AccountModel = await newAccount.save();
-			const newUser = new User<UserSchema>({
+			const newUser = new User<UserSchemaType>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
@@ -64,13 +65,14 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount = new Account<AccountSchema>({
+			const newAccount = new Account<AccountSchemaType>({
+				primary: true,
 				accountType: 'vip',
 				currency: body.currency,
 				balance: body.extra_funds,
 			});
 			const account: AccountModel = await newAccount.save();
-			const newUser = new User<UserSchema>({
+			const newUser = new User<UserSchemaType>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
@@ -96,7 +98,8 @@ export async function POST(request: Request) {
 				return new Response(errors, { status: 422 });
 			}
 			const hashedPassword = await bcryptjs.hash(body.password, 16);
-			const newAccount = new Account<AccountSchema>({
+			const newAccount = new Account<AccountSchemaType>({
+				primary: true,
 				accountType: 'business',
 				companyName: body.company_name,
 				companyCity: body.company_city,
@@ -104,7 +107,7 @@ export async function POST(request: Request) {
 				currency: body.currency,
 			});
 			const account: AccountModel = await newAccount.save();
-			const newUser = new User<UserSchema>({
+			const newUser = new User<UserSchemaType>({
 				userId: nanoid(),
 				firstName: body.first_name,
 				lastName: body.last_name,
@@ -121,9 +124,9 @@ export async function POST(request: Request) {
 			return new Response(user.userId);
 		}
 
-		return new Response(null, { status: 200 });
+		return new Response(null, { status: 400 });
 	} catch (error: any) {
 		console.log(error);
-		throw new Error('Unknown server error.');
+		return new Response('Error opening a user account', { status: 500 });
 	}
 }
