@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { UserSchema } from '../types/types';
+import { UserSchemaType } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema<UserSchema>(
+export const UserSchema = new Schema<UserSchemaType>(
 	{
 		userId: {
 			type: String,
