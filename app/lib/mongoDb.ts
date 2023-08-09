@@ -1,4 +1,6 @@
 import mongoose, { MongooseOptions } from 'mongoose';
+import { AccountSchema } from '../models/account';
+import { UserSchema } from '../models/user';
 
 const MONGODB_URI =
 	process.env.NODE_ENV === 'production'
@@ -34,13 +36,12 @@ export default async function connectMongo() {
 				opts
 			);
 
-			// TODO:
-			// if (!client.models.User) {
-			// 	client.model('User', require('../models/user')); !!!
-			// }
-			// if (!client.models.Account) {
-			// 	client.model('Account', require('../models/account')); !!!
-			// }
+			if (!client.models.User) {
+				client.model('User', AccountSchema);
+			}
+			if (!client.models.Account) {
+				client.model('Account', UserSchema);
+			}
 
 			cached.client = client;
 			return cached.client.connections[0];
