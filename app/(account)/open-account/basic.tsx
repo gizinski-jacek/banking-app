@@ -5,7 +5,7 @@ import { basicUserFormDefaults } from '@/app/lib/defaults';
 import {
 	BasicUserFormData,
 	BasicUserFormErrors,
-	supportedCurrencies,
+	currenciesCodes,
 } from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
@@ -14,7 +14,7 @@ import dateToISO from '@/app/lib/dateToISO';
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
 	createUser: (data: BasicUserFormData) => void;
-	errors: BasicUserFormErrors;
+	errors: BasicUserFormErrors | null;
 }
 
 export default function Basic({ changeUserType, createUser, errors }: Props) {
@@ -209,7 +209,7 @@ export default function Basic({ changeUserType, createUser, errors }: Props) {
 						placeholder='Currency'
 					>
 						<option value=''>Choose Currency</option>
-						{supportedCurrencies
+						{currenciesCodes
 							.sort((a, b) => a.localeCompare(b))
 							.map((cur, i) => {
 								return (

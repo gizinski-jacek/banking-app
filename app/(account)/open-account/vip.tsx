@@ -5,7 +5,7 @@ import { vipUserFormDefaults } from '@/app/lib/defaults';
 import {
 	VipUserFormData,
 	VipUserFormErrors,
-	supportedCurrencies,
+	currenciesCodes,
 } from '@/app/types/types';
 import { useState } from 'react';
 import capitalize from '../../lib/capitalize';
@@ -14,7 +14,7 @@ import dateToISO from '@/app/lib/dateToISO';
 interface Props {
 	changeUserType: (type: 'basic' | 'vip' | 'business' | null) => void;
 	createUser: (data: VipUserFormData) => void;
-	errors: VipUserFormErrors;
+	errors: VipUserFormErrors | null;
 }
 
 export default function Business({
@@ -213,7 +213,7 @@ export default function Business({
 						placeholder='Currency'
 					>
 						<option value=''>Choose Currency</option>
-						{supportedCurrencies
+						{currenciesCodes
 							.sort((a, b) => a.localeCompare(b))
 							.map((cur, i) => {
 								return (
