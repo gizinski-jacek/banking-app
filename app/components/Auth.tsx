@@ -1,28 +1,22 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Spinner from './Spinner';
 import { useEffect } from 'react';
 
-export default function Auth({
-	children,
-	redirect = '/login',
-}: {
-	children: React.ReactNode;
-	redirect?: string;
-	successRedirect?: string;
-}) {
+export default function Auth({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const { status } = useSession();
+	const path = usePathname();
 
 	useEffect(() => {
-		if (status === 'unauthenticated') router.push(redirect);
-	}, [status, router, redirect]);
+		const match = path.includes('dashboard');
+		if (status === 'unauthenticated' && match) router.push('/login');
+		if (status === 'authenticated' && !match) router.push('/dashboard');
+	}, [status, router, path]);
 
 	if (status === 'loading') return <Spinner />;
 
-	if (status === 'authenticated') return children;
-
-	return null;
+	return children;
 }
