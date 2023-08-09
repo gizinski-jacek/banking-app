@@ -1,14 +1,15 @@
 import mongoose from 'mongoose';
 import {
-	AccountSchema,
+	AccountSchemaType,
 	accountTypes,
-	supportedCurrencies,
+	currenciesCodes,
 } from '../types/types';
 
 const Schema = mongoose.Schema;
 
-const AccountSchema = new Schema<AccountSchema>(
+export const AccountSchema = new Schema<AccountSchemaType>(
 	{
+		primary: { type: Boolean, default: false },
 		accountType: {
 			type: String,
 			enum: accountTypes,
@@ -45,7 +46,7 @@ const AccountSchema = new Schema<AccountSchema>(
 		currency: {
 			type: String,
 			trim: true,
-			enum: supportedCurrencies,
+			enum: currenciesCodes,
 			required: true,
 		},
 		balance: {
