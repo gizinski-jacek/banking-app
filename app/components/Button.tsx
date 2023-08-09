@@ -4,6 +4,7 @@ interface CommonProps {
 	children?: React.ReactNode;
 	styleClass?: string;
 	styleObj?: React.CSSProperties;
+	active?: boolean;
 }
 
 type ConditionalProps =
@@ -35,6 +36,7 @@ export default function Button({
 	href,
 	buttonLike = false,
 	fillUp = false,
+	active = false,
 	cta,
 }: Props) {
 	return href ? (
@@ -44,7 +46,13 @@ export default function Button({
 				buttonLike
 					? 'rounded-lg border-2 border-red-700 bg-cstm-btn-bg text-cstm-btn-color capitalize hover:shadow hover:shadow-cstm-shadow'
 					: ''
-			} ${fillUp ? 'fill-up' : ''}`}
+			} ${
+				active
+					? 'bg-cstm-btn-bg block text-cstm-btn-color rounded-t-lg'
+					: fillUp
+					? 'fill-up'
+					: ''
+			}`}
 			style={styleObj}
 		>
 			{children || 'Button'}
@@ -55,6 +63,7 @@ export default function Button({
 			className={`rounded-lg border-1 border-black capitalize hover:shadow hover:shadow-cstm-shadow ${
 				styleClass || ''
 			}`}
+			style={styleObj}
 			onClick={(e) => (cta ? cta(e) : null)}
 		>
 			{children || 'Button'}
